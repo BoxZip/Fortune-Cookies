@@ -112,6 +112,7 @@ button{
     display: block;
     width: calc(80% - 0.5em);
     height: 50vh;
+    max-height: 10em;
 }
 #connect{
     background-color: white;
@@ -123,6 +124,7 @@ button{
 #mint, #main_page{
     max-width: min(100vw,100vh);
 }
+
 #main_page{
     transition: opacity 1s;
     left: min(100vw,100vh);
@@ -218,7 +220,7 @@ h3 b, h3 u{
         top: min(50vh,50vw);
         opacity: 1;
     }
-    #mint #customMSG{
+    #customMSG{
         width:80vw;
         font-size: 15px;
     }
