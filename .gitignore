@@ -9,4 +9,5 @@ scripts
 compiler_config.json
 hardhat.config.js
 package-lock.json
+webpack.config.js
 remix-compiler.config.js
