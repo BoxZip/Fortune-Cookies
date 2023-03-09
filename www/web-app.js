@@ -47,9 +47,9 @@ async function init(){
         nativeCurrency: { name: 'MATIC', decimals: 18, symbol: 'MATIC' },
         rpcUrls: ['https://rpc-mumbai.maticvigil.com/']
     };
-    let connectWallet = generateButton('Connect Wallet', async function(e){
-        await ethEnabled();
+    let connectWallet = generateButton('Mint Now!', async function(e){
         toggleMintPage();
+        await ethEnabled();
     });
     connectWallet.className = connectWallet.id = 'connect';
     document.body.appendChild(connectWallet);
