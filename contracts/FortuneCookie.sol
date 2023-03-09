@@ -111,6 +111,9 @@ contract FortuneCookie is ERC721Enumerable, Ownable {
     function tokenCount() public view returns(uint){
         return _tokenID;
     }
+    function totalSupply() public view override returns(uint){
+        return _totalSupply;
+    }
     function generateSVG() public view returns(string memory){
         bytes memory svg = abi.encodePacked(cookieSVG);
         return string(
