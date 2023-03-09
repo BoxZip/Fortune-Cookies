@@ -120,10 +120,14 @@ button{
     right: 0;
     padding: 2vh 2vw;
 }
+#mint, #main_page{
+    min-width: min(100vw,100vh);
+}
 #main_page{
     transition: opacity 1s;
     left: min(100vw,100vh);
     width: calc(99vw - min(100vw,100vh));
+    min-width: min(100vw,100vh);
     top: 0;
     position: absolute;
     color: #797979;
