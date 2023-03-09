@@ -1,0 +1,12 @@
+node_modules
+@openzeppelin
+artifacts
+*/artifacts
+assets
+cache
+scripts
+.env
+compiler_config.json
+hardhat.config.js
+package-lock.json
+remix-compiler.config.js
