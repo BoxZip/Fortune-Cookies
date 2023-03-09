@@ -15,6 +15,7 @@ contract FortuneCookie is ERC721Enumerable, Ownable {
     uint256 private _tokenID;
 
     string internal cookieSVG;
+    string internal cookieOpenedSVG;
 
     mapping(uint256 => string) private tokenSecretMessages;
     mapping(uint256 => string) internal standardMessages;
@@ -57,6 +58,7 @@ contract FortuneCookie is ERC721Enumerable, Ownable {
         maxMintQuantity = maxQuantity;
         pausedMint = true;
         cookieSVG = unicode'<?xml version="1.0" encoding="utf-8"?><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 2048" overflow="visible"><filter id="soften"><feGaussianBlur in="SourceGraphic" stdDeviation="7" /></filter><filter id="shadowblur"><feGaussianBlur in="SourceGraphic" stdDeviation="30" /></filter><g transform-origin="50% 50%" transform="scale(0.5,0.5)" filter="url(#soften)"><rect filter="url(#shadowblur)" width="100%" height="25%" transform="translate(0,2000)" transform-origin="50% 50%" rx="50%" fill="rgba(0,0,0,0.25)"/><text x="50%" y="50%" font-size="2048px" dominant-baseline="middle" text-anchor="middle" style="user-select:none" draggable="false">🥠</text></g></svg>';
+        cookieOpenedSVG = unicode'<?xml version="1.0" encoding="utf-8"?><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 2048" overflow="visible"><defs><clipPath id="clip-0"><ellipse style="fill: rgb(216, 216, 216); stroke: rgb(0, 0, 0);" cx="2402.994" cy="1901.495" rx="1094.996" ry="1043.113"></ellipse></clipPath><clipPath id="clip-1"><ellipse style="fill: rgb(216, 216, 216); stroke: rgb(0, 0, 0);" cx="807.253" cy="2185.262" rx="1094.996" ry="1043.113"></ellipse></clipPath><clipPath id="clip-2"><ellipse style="fill: rgb(216, 216, 216); stroke: rgb(0, 0, 0);" cx="119.125" cy="1049.529" rx="1094.996" ry="1043.113"></ellipse></clipPath></defs><filter id="soften"><feGaussianBlur in="SourceGraphic" stdDeviation="7"></feGaussianBlur></filter><filter id="shadowblur"><feGaussianBlur in="SourceGraphic" stdDeviation="30"></feGaussianBlur></filter><g transform-origin="50% 50%" transform="scale(0.5,0.5)" filter="url(#soften)"><rect filter="url(#shadowblur)" width="2675.881" height="206.75" transform-origin="50% 50%" rx="800" fill="rgba(0,0,0,0.25)" style="" y="2000" x="-152.917"></rect><text x="910.849" y="2079.205" font-size="2048px" dominant-baseline="middle" text-anchor="middle" style="user-select: none; white-space: pre; clip-path: url(#clip-2); font-size: 2048px;" draggable="false">🥠</text><text x="1746.601" y="1676.078" font-size="2048px" dominant-baseline="middle" text-anchor="middle" style="user-select: none; white-space: pre; font-size: 2048px; clip-path: url(#clip-1);" draggable="false">🥠</text><text x="1570.142" y="1681.761" font-size="2048px" dominant-baseline="middle" text-anchor="middle" style="user-select: none; white-space: pre; font-size: 2048px; clip-path: url(#clip-0);" draggable="false">🥠</text></g></svg>';
     }
 
     /*/
@@ -103,6 +105,9 @@ contract FortuneCookie is ERC721Enumerable, Ownable {
     function updateCookieSVG(string calldata svg_code) external onlyOwner {
         cookieSVG = svg_code;
     }
+    function updateCookieOpenedSVG(string calldata svg_code) external onlyOwner {
+        cookieOpenedSVG = svg_code;
+    }
     /*/
     /// public methods
     /*/
@@ -116,8 +121,8 @@ contract FortuneCookie is ERC721Enumerable, Ownable {
     function totalSupply() public view override returns(uint){
         return _totalSupply;
     }
-    function generateSVG() public view returns(string memory){
-        bytes memory svg = abi.encodePacked(cookieSVG);
+    function generateSVG(bool opened) public view returns(string memory){
+        bytes memory svg = abi.encodePacked(opened ? cookieOpenedSVG : cookieSVG);
         return string(
             abi.encodePacked(
                 bytes("data:image/svg+xml;base64,"),
@@ -132,7 +137,7 @@ contract FortuneCookie is ERC721Enumerable, Ownable {
             '{\n',
                 '\t"name": "Fortune Cookie #', token.toString(), '",\n',
                 '\t"description": "','A crisp cookie shell, containing a secret message inside.','",\n',
-                '\t"image_data": "', string(generateSVG()), '",\n',
+                '\t"image_data": "', string(generateSVG(nft.open)), '",\n',
                 '\t"attributes": [ \n',
                 string.concat(
                     (nft.open? '\t\t{ "value": "Fortune Revealed" },\n' : '\t\t{ "value": "Mystery Within"},\n'),

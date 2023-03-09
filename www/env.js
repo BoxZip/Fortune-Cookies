@@ -1,5 +1,5 @@
 export var chainId = 80001;
-export const FortuneCookie_address = '0x889335649c5fdE8c593e5FD11D31E6B32cAD4AB6';
+export const FortuneCookie_address = '0x7187518DBe520c3a3b55Bee956F9a21D1AfD62D0';
 
 export const AlchemySettings = {
   url: "https://polygon-mumbai.g.alchemy.com/v2/wumsLrTVuYJZTrOAj85fldbU8x8dWncw"
@@ -221,7 +221,13 @@ export const FortuneCookie_ABI =  [
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "bool",
+        "name": "opened",
+        "type": "bool"
+      }
+    ],
     "name": "generateSVG",
     "outputs": [
       {
@@ -794,6 +800,19 @@ export const FortuneCookie_ABI =  [
   },
   {
     "inputs": [],
+    "name": "totalOpened",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "totalSupply",
     "outputs": [
       {
@@ -837,6 +856,19 @@ export const FortuneCookie_ABI =  [
       }
     ],
     "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "svg_code",
+        "type": "string"
+      }
+    ],
+    "name": "updateCookieOpenedSVG",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
