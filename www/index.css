@@ -67,7 +67,7 @@ h2{
 }
 .showMint #mint{
     opacity: 1;
-    left:  0;
+    left: min(50vh, 50vw);
 }
 h1{
     margin-top: 5vh;
@@ -125,7 +125,7 @@ button{
 
 #main_page{
     transition: opacity 1s;
-    right: 0;
+    left: calc(min(50vw,50vh));
     width: calc(99vw - min(100vw,100vh));
     top: 0;
     position: absolute;
