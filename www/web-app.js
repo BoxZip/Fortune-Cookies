@@ -7,11 +7,17 @@ let MINT_TOGGLE;
 let BGSTYLE;
 let cookie_array;
 
-import { Alchemy } from 'alchemy-sdk';
+import { Network, Alchemy } from 'alchemy-sdk';
+import {ethers} from 'ethers';
+import { chainId, AlchemySettings, FortuneCookie_address, FortuneCookie_ABI } from './env.js';
+
+window.ethers = ethers;
+window.Alchemy = Alchemy;
+
+const $ = new Alchemy(AlchemySettings);
 
 const blockchains = {};
 
-var chainId;
 chainId = chainId === undefined ? 80001/*/Polygon Mumbai/*/ : chainId;
 
 function generateButton(textContent, onClick){
@@ -43,8 +49,7 @@ async function init(){
     };
     let connectWallet = generateButton('Connect Wallet', async function(e){
         await ethEnabled();
-        if(window.ethereum) toggleMintPage();
-        else alert('Mobile Web3 integration coming soon. \n\nOn desktop install Web3 browser extension, like MetaMask.')
+        toggleMintPage();
     });
     connectWallet.className = connectWallet.id = 'connect';
     document.body.appendChild(connectWallet);
@@ -54,8 +59,56 @@ async function init(){
 
     BGSTYLE = document.body.appendChild(document.createElement('style'))
 
+    $.ethersProvider = await $.config.getProvider();
+
+    window.FC = FortuneCookie = new ethers.Contract(FortuneCookie_address, FortuneCookie_ABI, $.ethersProvider);
+
     animateBG();
+
+    updatePageValues();
     //toggleMintPage();
+}
+
+function weiToEther(wei){
+    return parseInt(wei) / Math.pow(10, 18);
+}
+
+async function updatePageValues(){
+    let maxquantity = await FortuneCookie.maxMintQuantity();
+    document.getElementById('standard_quantity').max = maxquantity;
+    document.getElementById('custom_quantity').max = maxquantity;
+    [].slice.call(document.querySelectorAll('.maxquantity')).forEach(async function(el){
+        el.innerText = maxquantity;
+    });
+    let maxMessageLength = await FortuneCookie.maxMessageLength();
+    document.getElementById('customMSG').maxlength = maxMessageLength;
+    [].slice.call(document.querySelectorAll('.maxmessagelength')).forEach(async function(el){
+        el.innerText = maxMessageLength;
+    });
+    let totalSupply = await FortuneCookie._totalSupply();
+    [].slice.call(document.querySelectorAll('.totalsupply')).forEach(async function(el){
+        el.innerText = totalSupply;
+    });
+    /*/
+    /// Leave prices to reflect production cost rather than development
+    ///
+    let priceCustom = await FortuneCookie.priceCustom();
+    [].slice.call(document.querySelectorAll('.customprice')).forEach(async function(el){
+        el.innerText = weiToEther(priceCustom) + ' MATIC';
+    });
+    let priceStandard = await FortuneCookie.priceStandard();
+    [].slice.call(document.querySelectorAll('.standardprice')).forEach(async function(el){
+        el.innerText = weiToEther(priceStandard) + ' MATIC';
+    });
+    /*/
+    let tokenCount = await FortuneCookie.tokenCount();
+    [].slice.call(document.querySelectorAll('.tokencount')).forEach(async function(el){
+        el.innerText = tokenCount;
+    });
+    let mintPaused = await FortuneCookie.pausedMint();
+    [].slice.call(document.querySelectorAll('.mintstatus')).forEach(async function(el){
+        el.innerText = mintPaused? 'paused' : 'live';
+    });
 }
 
 function buildCookieArray(img, x, y, xOffset, yOffset, zOffset, spread){
@@ -89,16 +142,18 @@ let LUMDIR = Math.random() <= 0.5 ? 1 : -1;
 
 let LUM = LUMMIN+Math.floor(Math.random()*LUMMAX-LUMMIN);
 function animateBG(){
-    BG+=-7;
-    SAT+=SATDIR * 2;
-    LUM+=LUMDIR * 2.5;
+    let R = (Math.random()*20)-9.7;
+    BG+=-7*R;
+    SAT+=SATDIR * 2*R;
+    LUM+=LUMDIR * 2.5*R;
     if(SAT <= SATMIN || SAT >= SATMAX){ SATDIR = -SATDIR; SAT = Math.min(Math.max(SATMIN, SAT), SATMAX); }
     if(LUM <= LUMMIN || LUM >= LUMMAX){ LUMDIR = -LUMDIR; LUM = Math.min(Math.max(LUMMIN, LUM), LUMMAX); }
     (Math.random() <= 0.05) ? BGDIR = -BGDIR : null;
     if(!BGSTYLE) BGSTYLE = document.body.appendChild(document.createElement('style'));
     BGSTYLE.id = 'BGSTYLE';
-    BGSTYLE.innerText = ".BG, body, #mint button, .showMint #connect { background-color: hsl("+(BG%360)+", "+SAT+"%, "+LUM+"%); }  #mint h1 { color: hsl("+(BG%360)+", "+SAT+"%, "+LUM+"%); } #main_page { background-color: hsla("+(BG%360)+", "+SAT+"%, "+LUM+"%, 0.92); }";
-    setTimeout(animateBG, 1024);
+    let values = Math.abs(BG%360)+", "+SAT+"%, "+LUM+"%";
+    BGSTYLE.innerText = ".BG, body, #mint button, .showMint #connect { background-color: hsl("+values+"); }  #mint h1 { color: hsl("+values+"); } #main_page { background-color: black; color: hsla("+values+", 0.92); }";
+    setTimeout(animateBG, 3000);
 }
 
 const ethEnabled = async () => {
@@ -111,8 +166,6 @@ const ethEnabled = async () => {
         });
 
         await chainSwitchInstall(chainId);
-
-        FortuneCookie = new window.web3.eth.Contract(FortuneCookie_ABI, FortuneCookie_address);
         return true;  
     }  
     return false;

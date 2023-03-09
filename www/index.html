@@ -4,12 +4,16 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fortune Cookie On-Chain NFT</title>
+    
+        <title>Fortune Cookie On-Chain NFT</title>
+
+    <!--  Google Font Loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@900;400&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;900&display=swap" rel="stylesheet"> 
+    <!--  Dependencies -->
     <script src="web3.min.js"></script>
-    <script src="deployment-details.js"></script>
+    <!-- Enviromental Settings & Web App -->
     <script src="web-app.webpack.js" type="module"></script>
     <link rel="stylesheet" href="index.css" />
 </head>
@@ -20,38 +24,36 @@
         <h1>Fortune Cookie</h1>
         <h2>A crispy cookie shell, concealing a secret message.</h2>
         <h3>What does your future have in store?</h3>
-        <p><b>Fortune Cookie On-Chain NFT</b> is an open edition with a supply of <u>1,000,000 tokens</u>.</p>
+        <p><b>Fortune Cookie On-Chain NFT</b> is an open edition with a supply of <u><span class="totalsupply">1,000,000</span> tokens</u>.</p>
         <p><b>Fortune Cookies</b> are <u>On-Chain Non-Fungible Tokens</u>, which means their data is hosted completely on the blockchain. It doesn't require IPFS or a HTTP/S webserver to provide hosting for the metadata and image files.</p>
         <p><b>Fortune Cookies</b> are <i>minted with a secret message hidden inside them</i>. It is hidden until the owner of the NFT opens the cookie to reveal the message.</p>
         <p>You can only open and read the <b>Fortune Cookies that you own</b>.</p>
         <p><b>Fortune Cookies</b> can be transfered after being opened; or before, while the mystery remains intact.</p>
-        <h3>Minting is paused.</h3>
+        <h3>Minting is <b class="mintstatus">paused</b>.</h3>
     </div>
     <div id="mint" class="page">
         <h1>Fortune Cookies (Standard)</h1>
         <p>Generic cookies, with a randomly selected message inside.<br>
-            You can mint up to 9 at once. Each one will have a random message hidden inside.</p>
-        <p>How many would you like to mint at once? (1-9)</p>
-        <p class="mint"><input type="number" min="1" max="9" value="1"/><button id="standard_mint">Mint Standard Cookies!</button>
+            You can mint up to <u class="maxquantity">9</u> at once. Each one will have a random message hidden inside.</p>
+        <p>How many would you like to mint at once? (1-<span class="maxquantity">9</span>)</p>
+        <p class="mint"><input id="standard_quantity" type="number" min="1" max="9" value="1"/><button id="standard_mint">Mint Standard Cookies!</button>
         </p>
         <h1>Fortune Cookies (Custom)</h1>
         <p>The same crispy cookie shell, but this time concealing a message that <b>you write yourself ...</b></p>
-        <p>Your message can be up to <u>256</u> characters long.</p>
+        <p>Your message can be up to <u class="maxmessagelength">256</u> characters long.</p>
         <textarea id="customMSG" placeholder="Will it be good fortune or misfortune in store?" maxlength="256"></textarea>
-        <p class="bold">How many would you like to <u>mint with this message</u>? (1-9)</p>
+        <p class="bold">How many would you like to <u>mint with this message</u>? (1-<span class="maxquantity">9</span>)</p>
         <p>They will each have the message you enter above as their secret message.</p>
-        <p class="mint"><input type="number" min="1" max="9" value="1"/><button id="custom_mint">Mint <span>1</span> Custom!</button>
+        <p class="mint"><input id="custom_quantity" type="number" min="1" max="9" value="1"/><button id="custom_mint">Mint <span>1</span> Custom!</button>
         </p>
     <div id="info">
         <h1>Minting Information</h1>
-        <h2>NFT Mint Prices</h2>
-        <p><b>Standard Fortune Cookie:</b> <u id="standard_price">1 MATIC</u> each</p>
-        <p><b>Custom Fortune Cookie:</b> <u id="custom_price">10 MATIC</u> each</p>
-        <h2>NFT Minting Limits</h2>
-        <p><b>Maximum Collection Size:</b> <u id="total_supply">1,000,000</u> tokens</p>
-        <p><b>Maximum Minted At Once:</b> <u id="max_quantity">9</u> tokens</p>
+        <p><b>Standard Fortune Cookie:</b> <u class="standardprice">1 MATIC</u> each</p>
+        <p><b>Custom Fortune Cookie:</b> <u class="customprice">10 MATIC</u> each</p>
+        <p><b>Maximum Collection Size:</b> <u class="totalsupply">1,000,000</u> tokens</p>
+        <p><b>Maximum Minted At Once:</b> <u class="maxquantity">9</u> tokens</p>
         </p>
-        <h3>A total of <u>0</u> have minted so far.</h3>
+        <h3>A total of <u class="tokencount">0</u> have minted so far.</h3>
     </div>
     </div>
 </body>

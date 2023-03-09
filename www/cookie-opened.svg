@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 2048" overflow="visible">
+<defs>
+  <clipPath id="clip-0">
+    <path style="fill: rgb(216, 216, 216);" d="M -485.979 2706.122 L 2949.193 -1089.498 L 2883.653 2678.81 L -485.979 2706.122 Z"></path>
+  </clipPath>
+  <clipPath id="clip-1">
+    <path style="fill: rgb(216, 216, 216);" d="M -756.312 2979.799 L 2678.863 -815.826 L -745.39 -821.288 L -756.312 2979.799 Z"></path>
+  </clipPath>
+</defs>
+<filter id="soften"><feGaussianBlur in="SourceGraphic" stdDeviation="7" /></filter>
+<filter id="shadowblur"><feGaussianBlur in="SourceGraphic" stdDeviation="30" /></filter>
+<g transform-origin="50% 50%" transform="scale(0.5,0.5)" filter="url(#soften)">
+  <rect filter="url(#shadowblur)" width="100%" height="25%" transform="translate(0,2000)" transform-origin="50% 50%" rx="50%" fill="rgba(0,0,0,0.25)"/>
+  <text x="974.763" y="1511.224" font-size="2048px" dominant-baseline="middle" text-anchor="middle" style="user-select: none; white-space: pre; clip-path: url(#clip-1); font-size: 2048px;" draggable="false" transform="matrix(-0.933506, -0.358562, 0.358562, -0.933506, 1319.62085, 2384.810791)">🥠</text>
+  <text x="1231.412" y="1249.076" font-size="2048px" dominant-baseline="middle" text-anchor="middle" style="user-select: none; white-space: pre; font-size: 2048px; clip-path: url(#clip-0);" draggable="false" transform="matrix(0.616064, 0.787696, -0.787696, 0.616064, 1408.566772, -324.280334)">🥠</text>
+</g>
+</svg>
