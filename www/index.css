@@ -1,29 +1,32 @@
 @import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;900&display=swap');
 body{
-    display: flex;
-    align-items: flex-start;
+    display: grid;
+    grid-template-columns: [main-start] 1fr [content-start] 2fr [content-end] 1fr [main-end];
+    grid-template-rows: [main-start] 100% [main-end];
     margin: 0;
     font-family: 'Inconsolata', monospace!important;
     font-weight: 400;
-    max-height: 100vh;
-    width: 100vw;
+    height: 100%;
+    width: 100%;
+    max-height: 100%;
     padding: 0!important;
-    position: relative;
     overflow-x: hidden;
-    overflow-y: auto;
+    overflow-y: hidden;
     color: rgba(0,0,0,0.97);
-    font-size: 19px;
+    font-size: calc((2vw + 1vh)/2);
     background-color: grey;
+    z-index: 1000;
 }
 html{
-    max-width: 100vw;
+    width: 100%;
+    height: 100%;
     overflow: hidden;
 }
 *::selection{
     background-color: black;
     color:white;
 }
-img, button {
+.array img, button {
     display: inline-block;
     user-select: none;
 }
@@ -32,42 +35,51 @@ h1, h2, h3{
 }
 h1 {
     font-stretch:ultra-expanded;
-    font-size: 36px;
+    font-size: 3em;
     font-weight: 800;
     margin: 0;
 }
 h2{
-    font-size: 20px;
+    font-size: 1em;
     font-weight: 800;
 }
 #customMSG, h3{
-    font-size: 20px;
+    font-size: 1em;
     font-weight: 400;
     background-color: white;
     display: block;
     padding: 0.25em 0.5em;
 }
 .page {
-    width: calc(80vw - min(100vh, 100vw));
     text-align: center;
-    max-width: min(100vw,100vh);
-    min-width: 50vw;
+    grid-row-start: main-start;
+    grid-row-end: main-end;
+    grid-column-start: content-start;
+    grid-column-end: content-end;
+    overflow-y: auto;
+    z-index: 10000;
 }
 #mint{
     background-color: white;
     position: relative;
     left: -100vw;
     top: 0;
-    width: calc(100vw - min(100vh, 100vw));
-    height: 100%;
+    width: 50vw;
     transition: left 0.5s, top 0.5s, opacity 1.5s;
     opacity: 0;
     padding: 0 0;
     text-align: center;
+    visibility: collapse;
 }
 .showMint #mint{
+    grid-row-start: main-start;
+    grid-row-end: main-end;
+    grid-column-start: content-start;
+    grid-column-end: content-end;
+    top:0;left:0;
     opacity: 1;
-    left: max(50vh, 25vw);
+    visibility: visible;
+    overflow-y: auto;
 }
 h1{
     margin-top: 5vh;
@@ -77,11 +89,15 @@ h1{
     display: inline-block;
 }
 h3{
-    margin-bottom: 5vh;
+    margin-top: 1em;
+    margin-bottom: 1em;
 }
 #mint h1, #mint p, #mint h2, #mint h3, #mint #customMSG{
     margin-left: 5vw;
     margin-right: 5vw;
+}
+#mint img {
+    width: min(25vh,25vw);
 }
 #mint .mint{
     text-align: center;
@@ -121,14 +137,11 @@ button{
     top: 0;
     right: 0;
     padding: 2vh 2vw;
+    z-index: 10000;
 }
 
 #main_page{
     transition: opacity 1s;
-    left: max(50vh, 25vw);
-    width: calc(99vw - min(100vw,100vh));
-    top: 0;
-    position: absolute;
     color: #797979;
     background-color: black;
 }
@@ -147,7 +160,7 @@ button{
     color: black;
 }
 #main_page p{
-    background-color: rgba(255,255,255,0.15);
+    background-color: rgba(255,255,255,0.05);
     padding: 0.5em;
 }
 #main_page p:nth-child(even){
@@ -155,7 +168,7 @@ button{
     padding: 0.5em;
 }
 #main_page h1{
-    font-size: 50px;
+    font-size: 4em;
     letter-spacing: -2px;
     text-shadow: 0px 0px 4px black;
 }
@@ -179,19 +192,15 @@ h3 b, h3 u{
 }
 @media screen and (max-width: 749px){
     body{
-        display: flex;
-        align-items: flex-start;
-        justify-content: flex-start;
-        flex-direction: column;
+        font-size: calc((1vw + 2vh));
     }
     #main_page{
         left: 0;
-        top: min(100vh,100vw);
-        width: 90vw;
-    }
-    img{
-        position: fixed;
-        z-index: -1;
+        top: 0;
+        grid-column-start: main-start;
+        grid-column-end: main-end;
+        grid-row-start: main-start;
+        grid-row-end: main-end;
     }
     .page {
         width: 90vw;
@@ -203,19 +212,23 @@ h3 b, h3 u{
     }
     #mint{
         background-color: white;
-        left: 0;
-        top: 100vh;
+        left: -100vw;
+        top: 0;
         width: 100vw;
-        min-height: 200vh;
-        max-height: 400vh;
         padding: 0;
         opacity: 0;
+        visibility: collapse;
 
     }
     .showMint #mint{
         left: 0;
-        top: min(50vh,50vw);
+        grid-column-start: main-start;
+        grid-column-end: main-end;
+        bottom: 0;
+        width: auto;
+        height: auto;
         opacity: 1;
+        visibility: visible;
     }
     #customMSG{
         width:80vw;
@@ -247,15 +260,20 @@ h3 b, h3 u{
 .array img{
     width: 300px;
     height: 300px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
 }
 .array{
-    width: 100vw;
-    height: 100vh;
-    position: fixed;
-    translate: -768px -256px;
+    grid-row-start: main-start;
+    grid-row-end: main-end;
+    grid-column-start: main-start;
+    grid-column-end: main-end;
+    overflow: hidden;
+    height: calc(100vh + 0);
+    translate: -0 -0;
     scale: 1.25 1.25;
     transform-origin: 50% 50%;
-    z-index: -4;
+    z-index: 500;
 }
 .array *{
     transform-origin: 50% 50%;
@@ -275,7 +293,8 @@ h3 b, h3 u{
 }
 .hide{
     opacity: 0;
+    visibility: collapse;
 }
 .BG, body, #mint button, .showMint #connect, #main_page, #mint *{
-    transition: background-color 3s, color 3s, opacity 1.5s;
+    transition: background-color 2.97s, color 2.97s, opacity 1.5s;
 }

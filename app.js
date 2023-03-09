@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 
 const app = express();
-const port = 3692;
+const port = 8888;
 
 app.use(express.static(path.join(__dirname, 'www')));
 

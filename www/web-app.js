@@ -5,7 +5,7 @@ let web3;
 let FortuneCookie;
 let MINT_TOGGLE;
 let BGSTYLE;
-let cookie_array;
+let cookie_array_HTML;
 
 import { Network, Alchemy } from 'alchemy-sdk';
 import {ethers} from 'ethers';
@@ -54,8 +54,16 @@ async function init(){
     connectWallet.className = connectWallet.id = 'connect';
     document.body.appendChild(connectWallet);
 
-    cookie_array = buildCookieArray('<img src="cookie.svg" width="128px" height="128px" />', 128, 128, 1500, 1000, -1);
-    document.getElementById('cookie_array').innerHTML = cookie_array;
+
+    let cookie_array = document.getElementById('cookie_array');
+
+    var openCookie = function(e){ console.log(e.target); if(e.target.tagName.toUpperCase() == 'IMG') e.target.src = 'cookie-opened.svg'; };
+
+    if(window.outerWidth > 749) {
+        cookie_array_HTML = buildCookieArray('<img src="cookie.svg" width="256px" height="256px" />', 64, 64, 2000, 2000, -1);
+        cookie_array.innerHTML = cookie_array_HTML;
+    }
+    [].slice.call(cookie_array.childNodes).forEach((node)=>node.addEventListener('click', openCookie));
 
     BGSTYLE = document.body.appendChild(document.createElement('style'))
 
@@ -117,10 +125,13 @@ function buildCookieArray(img, x, y, xOffset, yOffset, zOffset, spread){
     xOffset = typeof xOffset == 'number' ? xOffset: 1;
     yOffset = typeof yOffset == 'number' ? yOffset: 1;
     zOffset = typeof zOffset == 'number' ? zOffset: 1;
+
+    let xAll = -512;
+    let yAll = -256;
     let c = 0;
     for(var i=1; i<=x; i++){
         for(var j=1; j<=y; j++){
-            html += '<img src="cookie.svg" style="translate: '+(xOffset*Math.pow(j, 0.79)*(2/i))+'px '+(yOffset*Math.pow(i, 0.5)*(1/i))+'px; scale: '+(2/i)+' '+(2/i)+' 1; z-index: '+(zOffset*i*j)+';"/>';
+            html += '<img src="cookie.svg" style="translate: '+((xOffset*Math.pow(j, 0.79)*(2/i))+xAll)+'px '+((yOffset*Math.pow(i, 0.5)*(1/i))+yAll)+'px; scale: '+(2/i)+' '+(2/i)+' 1; z-index: '+(zOffset*i*j)+';"/>';
             c++;
         }
         html += '</div>';
@@ -136,8 +147,8 @@ let SATDIR = Math.random() <= 0.5 ? 1 : -1;
 
 let SAT = SATMIN+Math.floor(Math.random()*SATMAX-SATMIN);
 
-let LUMMIN = 55;
-let LUMMAX = 95;
+let LUMMIN = 40;
+let LUMMAX = 60;
 let LUMDIR = Math.random() <= 0.5 ? 1 : -1;
 
 let LUM = LUMMIN+Math.floor(Math.random()*LUMMAX-LUMMIN);
@@ -145,13 +156,13 @@ function animateBG(){
     let R = (Math.random()*20)-9.7;
     BG+=-7*R;
     SAT+=SATDIR * 2*R;
-    LUM+=LUMDIR * 2.5*R;
+    LUM+=LUMDIR * 0.25*R;
     if(SAT <= SATMIN || SAT >= SATMAX){ SATDIR = -SATDIR; SAT = Math.min(Math.max(SATMIN, SAT), SATMAX); }
     if(LUM <= LUMMIN || LUM >= LUMMAX){ LUMDIR = -LUMDIR; LUM = Math.min(Math.max(LUMMIN, LUM), LUMMAX); }
     (Math.random() <= 0.05) ? BGDIR = -BGDIR : null;
     if(!BGSTYLE) BGSTYLE = document.body.appendChild(document.createElement('style'));
     BGSTYLE.id = 'BGSTYLE';
-    let values = Math.abs(BG%360)+", "+SAT+"%, "+LUM+"%";
+    let values = Math.abs(BG%360)+", "+25+"%, "+LUM+"%";
     BGSTYLE.innerText = ".BG, body, #mint button, .showMint #connect { background-color: hsl("+values+"); }  #mint h1 { color: hsl("+values+"); } #main_page { background-color: black; color: hsla("+values+", 0.92); }";
     setTimeout(animateBG, 3000);
 }
