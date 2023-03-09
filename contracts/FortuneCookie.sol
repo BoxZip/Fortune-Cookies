@@ -31,6 +31,8 @@ contract FortuneCookie is ERC721Enumerable, Ownable {
     uint256 public numCustomMinted;
     uint256 public numTotalMinted;
 
+    uint256 public totalOpened;
+
     mapping(uint256 => NFT) public tokens;
 
     bool public pausedMint;
@@ -268,6 +270,7 @@ contract FortuneCookie is ERC721Enumerable, Ownable {
         tokens[tokenID].open = true;
         tokens[tokenID].openedAt = block.timestamp;
         tokens[tokenID].openedBy = _msgSender();
+        totalOpened++;
     }
     function read(uint256 tokenID) external view returns (string memory){
         require(tokens[tokenID].minted == true, 'This token does not exist');

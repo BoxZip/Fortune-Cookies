@@ -22,7 +22,7 @@
     <div id="cookie_array" class="array"></div>
 
     <div id="main_page" class="page">
-        <h1>Fortune Cookie</h1>
+        <img src="cookie.svg"/><h1>Fortune Cookie</h1>
         <h2>A crispy cookie shell, concealing a secret message.</h2>
         <h3>What does your future have in store?</h3>
         <p><b>Fortune Cookie On-Chain NFT</b> is an open edition with a supply of <u><span class="totalsupply">1,000,000</span> tokens</u>.</p>
@@ -34,17 +34,19 @@
     </div>
     <div id="mint" class="page">
         <img src="cookie.svg"/>
-        <h1>Fortune Cookies (Standard)</h1>
+        <h1><b>Standard</b> Fortune Cookie</h1>
+        <h3>Randomly selected at mint</h3>
         <p>Generic cookies, with a randomly selected message inside.<br>
             You can mint up to <u class="maxquantity">9</u> at once. Each one will have a random message hidden inside.</p>
         <p>How many would you like to mint at once? (1-<span class="maxquantity">9</span>)</p>
         <p class="mint"><input id="standard_quantity" type="number" min="1" max="9" value="1"/><button id="standard_mint">Mint Standard Cookies!</button>
         </p>
         <img src="cookie.svg"/>
-        <h1>Fortune Cookies (Custom)</h1>
+        <h1><b>Custom</b> Fortune Cookie</h1>
+        <h3>Custom message decided before minting</h3>
         <p>The same crispy cookie shell, but this time concealing a message that <b>you write yourself ...</b></p>
         <p>Your message can be up to <u class="maxmessagelength">256</u> characters long.</p>
-        <textarea id="customMSG" placeholder="Will it be good fortune or misfortune in store?" maxlength="256"></textarea>
+        <textarea id="customMSG" placeholder="A message which describes the fortune of the person who opens this cookie." maxlength="256"></textarea>
         <p class="bold">How many would you like to <u>mint with this message</u>? (1-<span class="maxquantity">9</span>)</p>
         <p>They will each have the message you enter above as their secret message.</p>
         <p class="mint"><input id="custom_quantity" type="number" min="1" max="9" value="1"/><button id="custom_mint">Mint <span>1</span> Custom!</button>
@@ -57,9 +59,11 @@
         <p><b>Maximum Collection Size:</b> <u class="totalsupply">1,000,000</u> tokens</p>
         <p><b>Maximum Minted At Once:</b> <u class="maxquantity">9</u> tokens</p>
         </p>
-        <h3>A total of <u class="tokencount">0</u> have minted so far.</h3>
+        <img src="cookie.svg"/>
+        <h3>A total of <b class="tokencount">0</b> have been minted.</h3>
+        <img src="cookie-opened.svg"/>
+        <h3>A total of <b class="openedcount">0</b> have been opened.</h3>
     </div>
-    <img src="cookie.svg"/>
     </div>
 </body>
 </html>

@@ -6,20 +6,15 @@ body{
     margin: 0;
     font-family: 'Inconsolata', monospace!important;
     font-weight: 400;
-    height: 100%;
-    width: 100%;
-    max-height: 100%;
     padding: 0!important;
-    overflow-x: hidden;
-    overflow-y: hidden;
+    position: relative;
+    overflow: hidden;
     color: rgba(0,0,0,0.97);
     font-size: calc((2vw + 1vh)/2);
     background-color: grey;
     z-index: 1000;
 }
 html{
-    width: 100%;
-    height: 100%;
     overflow: hidden;
 }
 *::selection{
@@ -50,12 +45,16 @@ h2{
     display: block;
     padding: 0.25em 0.5em;
 }
+h3{
+    font-size: 1.42em;
+}
 .page {
     text-align: center;
     grid-row-start: main-start;
     grid-row-end: main-end;
     grid-column-start: content-start;
     grid-column-end: content-end;
+    height: 100vh;
     overflow-y: auto;
     z-index: 10000;
 }
@@ -81,18 +80,27 @@ h2{
     visibility: visible;
     overflow-y: auto;
 }
+#main_page img{
+    display: inline-block;
+    width: min(25vw,25vh);
+    transform-origin: 50% 50%;
+    top: 6vh;
+    right:0;
+    position: absolute;
+}
 h1{
-    margin-top: 5vh;
     color: white;
     font-weight: 800;
     font-size: 36px;
-    display: inline-block;
+    display: block;
+    margin-top: 0.42em;
+    margin-bottom: 0.24em;
 }
 h3{
     margin-top: 1em;
     margin-bottom: 1em;
 }
-#mint h1, #mint p, #mint h2, #mint h3, #mint #customMSG{
+#mint h1, #mint p, #mint h2, #mint h3{
     margin-left: 5vw;
     margin-right: 5vw;
 }
@@ -107,7 +115,7 @@ h3{
     display: inline-block;
 }
 #mint p{
-    line-height: 2em;
+    line-height: 1.5em;
 }
 input{
     border: 0;
@@ -129,25 +137,38 @@ button{
     display: block;
     width: calc(80% - 0.5em);
     height: 50vh;
-    max-height: 10em;
+    max-height: 5em;
+    margin: 0 auto;
 }
 #connect{
     background-color: white;
-    position: fixed;
-    top: 0;
-    right: 0;
+    position: absolute;
+    top: 2vh;
+    right: 2vw;
     padding: 2vh 2vw;
     z-index: 10000;
+}
+#connect:hover{
+    background-color: rgba(255,255,255,0.79)!important;
 }
 
 #main_page{
     transition: opacity 1s;
     color: #797979;
-    background-color: black;
+    background-color: rgba(10,10,10,0.95);
+    grid-column-start: content-start;
+    grid-column-end: content-end;
+    grid-row-start: main-start;
+    grid-row-end: main-end;
+    height: 100vh;
+    overflow-y: auto;
 }
 #main_page p, #main_page h3{
     margin-left: 2vw;
     margin-right: 2vw;
+}
+#main_page p {
+    line-height: 1.5;
 }
 .bold, b {
     color: white;
@@ -174,15 +195,12 @@ button{
 }
 #info{
     background-color: white;
-    padding-bottom: 2.5vh;
+    margin-bottom: 10vh;
 }
 #info h2{
     color:white;
     font-size: 25px;
     margin-top: 5vh;
-}
-#info h3{
-    margin-top: 7.5vh;
 }
 #info p{
     line-height: 1em;
@@ -192,55 +210,80 @@ h3 b, h3 u{
 }
 @media screen and (max-width: 749px){
     body{
-        font-size: calc((1vw + 2vh));
+        font-size: calc((1vw + 1vh));
+        overflow-x:hidden;
+        position:fixed;
+        width: 100vw;
+        height: 100vh;
+        height: -webkit-fill-available;
+        transform: scale(0.96,0.96) translate(0, 0);
+        transform-origin: 50% 50%;
+    }
+    .page {
+        width: 90vw;
+        margin: 0 0;
+        height: 100vh;
+        height: -webkit-fill-available;
     }
     #main_page{
+        position: relative;
         left: 0;
+        width: 100vw;
+        height: 100vh;
+        height: -webkit-fill-available;
         top: 0;
         grid-column-start: main-start;
         grid-column-end: main-end;
         grid-row-start: main-start;
         grid-row-end: main-end;
+        background-color: rgba(0,0,0,0.69);
     }
-    .page {
-        width: 90vw;
-        margin: 0 0 0 0;
-        padding: 0 5vw;
+    #main_page img{
+        position: relative;
+        top:7vh;
+        right: 0;
+        width: min(50vh, 50vw);
     }
     #main_page h1{
-        margin-top: 5vh;
+        margin-top: 2em;
     }
     #mint{
         background-color: white;
+        grid-column-start: main-start;
+        grid-column-end: main-end;
+        grid-row-start: main-start;
+        grid-row-end: main-end;
         left: -100vw;
         top: 0;
-        width: 100vw;
+        width: auto;
+        margin: 0 auto;
+        height: 100vh;
+        height: -webkit-fill-available;
         padding: 0;
         opacity: 0;
         visibility: collapse;
-
+        position: relative;
     }
     .showMint #mint{
-        left: 0;
+        right: auto;top:auto;
+        left: auto;bottom: auto;
         grid-column-start: main-start;
         grid-column-end: main-end;
-        bottom: 0;
-        width: auto;
-        height: auto;
+        grid-row-start: main-start;
+        grid-row-end: main-end;
+        padding: 0;        
         opacity: 1;
         visibility: visible;
     }
     #customMSG{
         width:80vw;
-        font-size: 15px;
+        font-size: 1em;
+        margin: 0 auto;
     }
     h1{
         font-size: 30px;
     }
     h2{
-        font-size: 15px;
-    }
-    #mint *{
         font-size: 15px;
     }
     #mint h1{
@@ -250,11 +293,22 @@ h3 b, h3 u{
         font-weight: 800;
         font-size: 2em;
     }
+    #mint p, #mint h1, #mint h2, #mint h3 {
+        margin-left: 5vw;
+        margin-right: 5vw;
+    }
     #mint p, #mint h1, #mint h2{
         background-color: transparent;
+        padding: 0;
     }
     #mint h2{
         font-size: 30px;
+    }
+    #main_page p{
+        color: white !important;
+    }
+    #main_page h3{
+        color: black;
     }
 }
 .array img{
@@ -293,8 +347,7 @@ h3 b, h3 u{
 }
 .hide{
     opacity: 0;
-    visibility: collapse;
 }
 .BG, body, #mint button, .showMint #connect, #main_page, #mint *{
-    transition: background-color 2.97s, color 2.97s, opacity 1.5s;
+    transition: background-color 2.97s, color 2.97s, opacity 0.5s;
 }

@@ -113,6 +113,12 @@ async function updatePageValues(){
     [].slice.call(document.querySelectorAll('.tokencount')).forEach(async function(el){
         el.innerText = tokenCount;
     });
+    /*/
+    let totalOpened = await FortuneCookie.totalOpened();
+    [].slice.call(document.querySelectorAll('.openedcount')).forEach(async function(el){
+        el.innerText = totalOpened;
+    });
+    /*/
     let mintPaused = await FortuneCookie.pausedMint();
     [].slice.call(document.querySelectorAll('.mintstatus')).forEach(async function(el){
         el.innerText = mintPaused? 'paused' : 'live';
@@ -138,7 +144,7 @@ function buildCookieArray(img, x, y, xOffset, yOffset, zOffset, spread){
     }
     return html;
 }
-let BG = Math.floor(Math.random()*360);
+let BG = 120;
 let BGDIR = Math.random() <= 0.5 ? 1 : -1;
 
 let SATMIN = 25;
@@ -163,8 +169,8 @@ function animateBG(){
     if(!BGSTYLE) BGSTYLE = document.body.appendChild(document.createElement('style'));
     BGSTYLE.id = 'BGSTYLE';
     let values = Math.abs(BG%360)+", "+25+"%, "+LUM+"%";
-    BGSTYLE.innerText = ".BG, body, #mint button, .showMint #connect { background-color: hsl("+values+"); }  #mint h1 { color: hsl("+values+"); } #main_page { background-color: black; color: hsla("+values+", 0.92); }";
-    setTimeout(animateBG, 3000);
+    BGSTYLE.innerText = ".BG, body, #mint button, .showMint #connect { background-color: hsl("+values+"); }  #mint h1 { color: hsl("+values+"); } #main_page { color: hsla("+values+", 0.92); }";
+    requestAnimationFrame(function(){ setTimeout(animateBG, 3000) });
 }
 
 const ethEnabled = async () => {
