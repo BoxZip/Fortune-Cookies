@@ -177,6 +177,8 @@ async function mintCustom(){
     }
 }
 
+
+
 function buildCookieArray(img, x, y, xOffset, yOffset, zOffset, spread){
     var html = "";
     spread = typeof spread == 'number' ? spread: 1;

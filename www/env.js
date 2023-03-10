@@ -1,5 +1,5 @@
 export var chainId = 80001;
-export const FortuneCookie_address = '0xa47f29F0A9Dbd95fb5B1e55EcA0CE29aCabD91E3';
+export const FortuneCookie_address = '0x9b012d5EcCE399e30fD3229f93B3fAb3e3B4EAD5';
 
 export const AlchemySettings = {
   url: "https://polygon-mumbai.g.alchemy.com/v2/wumsLrTVuYJZTrOAj85fldbU8x8dWncw"
@@ -93,6 +93,37 @@ export const FortuneCookie_ABI =  [
       {
         "indexed": true,
         "internalType": "address",
+        "name": "minter",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "custom",
+        "type": "bool"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "quantity",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256[]",
+        "name": "tokenIds",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "Mint",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
         "name": "previousOwner",
         "type": "address"
       },
@@ -130,6 +161,19 @@ export const FortuneCookie_ABI =  [
     ],
     "name": "Transfer",
     "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "_numStandardMessages",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
   },
   {
     "inputs": [],
