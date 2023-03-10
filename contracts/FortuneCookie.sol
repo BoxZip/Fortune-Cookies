@@ -20,7 +20,7 @@ contract FortuneCookie is ERC721Enumerable, Ownable {
     mapping(uint256 => string) private tokenSecretMessages;
     mapping(uint256 => string) internal standardMessages;
 
-    uint256 internal _numStandardMessages;
+    uint256 public _numStandardMessages;
 
     uint256 public _totalSupply;
     uint256 public priceStandard;
@@ -146,7 +146,7 @@ contract FortuneCookie is ERC721Enumerable, Ownable {
         bytes memory dataURI = abi.encodePacked(
             '{\n',
                 '\t"name": "Fortune Cookie #', token.toString(), '",\n',
-                '\t"description": "',string.concat('A crisp cookie shell, containing a secret message inside.\nInteract with the cookie @ [fortunecookie.lol](',externalURL,'NFT?',token.toString(),')",\n'),
+                '\t"description": "',string.concat('A crisp cookie shell, containing a secret message inside.\\nInteract with the cookie @ [fortunecookie.lol](',externalURL,'NFT?',token.toString(),')",\n'),
                 '\t"image_data": "', string(generateSVG(nft.open)), '",\n',
                 string.concat('\t"external_url": "', externalURL,'",\n'),
                 '\t"attributes": [ \n',

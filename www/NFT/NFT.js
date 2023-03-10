@@ -1,5 +1,4 @@
 import { AlchemySettings, FortuneCookie_address, FortuneCookie_ABI, chainId } from '../env.js';
-import * as Web3 from '../web3.min.js';
 import { Alchemy } from 'alchemy-sdk';
 import {ethers} from 'ethers';
 
@@ -251,7 +250,7 @@ async function chainSwitchInstall(chainId){
         try {
             await window.ethereum.request({
             method: 'wallet_switchEthereumChain',
-            params: [{ chainId: window.web3.utils.toHex(chainId) }]
+            params: [{ chainId: '0x'+(chainId).toString(16) }]
             });
         } catch (err) {
             // This error code indicates that the chain has not been added to MetaMask
