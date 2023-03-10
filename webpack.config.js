@@ -1,8 +1,8 @@
 const path = require('path');
 module.exports = {
     entry: {
-        'web-app.webpack': path.join(__dirname, 'www/web-app.js'),
-        'NFT/NFT.webpack': path.join(__dirname, 'www/NFT/NFT.js')
+        'web-app-webpack': path.join(__dirname, 'www/web-app.js'),
+        'NFT/NFT-webpack': path.join(__dirname, 'www/NFT/NFT.js')
     },
     mode: "production",
     output: {
