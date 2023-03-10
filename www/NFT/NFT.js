@@ -56,10 +56,13 @@ async function init(){
 }
 
 async function onClick(e){
+    e.preventDefault();
+    e.returnValue = false;
     if(!NFT.connected) await NFT.actions.connect();
     else if(NFT.connected){
         NFT.actions[NFT.action]();
     }
+    return false;
 }
 NFT.onClick = onClick;
 

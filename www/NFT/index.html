@@ -103,17 +103,7 @@
     </style>
 </head>
 <body class="">
-    <div id="click"><img src="../cookie.svg" id="image" /><div id="label">CONNECT</div></div>
+    <div id="click"><img src="../cookie.svg" id="image" /><a id="label" href="" target="_blank">CONNECT</a></div>
     <div id="note"></div>
-    <script>
-        function onLoad(){
-            if(!window.NFT){
-                document.getElementById('click').addEventListener('click', function(){
-                    window.open(window.location.href, '_blank').focus();
-                })
-            }
-        }
-        window.addEventListener('load', onLoad);
-    </script>
 </body>
 </html>
