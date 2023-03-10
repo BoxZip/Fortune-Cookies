@@ -65,7 +65,7 @@ async function init(){
     var openCookie = function(e){ console.log(e.target); if(e.target.tagName.toUpperCase() == 'IMG') e.target.src = 'cookie-opened.svg'; };
 
     if(window.outerWidth > 749) {
-        cookie_array_HTML = buildCookieArray('<img src="cookie.svg" width="256px" height="256px" />', 64, 64, 2000, 2000, -1);
+        cookie_array_HTML = buildCookieArray('<img src="cookie.svg" width="256px" height="256px" />', 32, 32, 2000, 2000, -1);
         cookie_array.innerHTML = cookie_array_HTML;
     }
     [].slice.call(cookie_array.childNodes).forEach((node)=>node.addEventListener('click', openCookie));
@@ -185,7 +185,7 @@ function buildCookieArray(img, x, y, xOffset, yOffset, zOffset, spread){
     zOffset = typeof zOffset == 'number' ? zOffset: 1;
 
     let xAll = -512;
-    let yAll = -256;
+    let yAll = -256-128;
     let c = 0;
     for(var i=1; i<=x; i++){
         for(var j=1; j<=y; j++){
