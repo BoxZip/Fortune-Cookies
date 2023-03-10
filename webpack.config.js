@@ -1,4 +1,6 @@
 const path = require('path');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+
 module.exports = {
     entry: {
         'web-app-webpack': path.join(__dirname, 'www/web-app.js'),
@@ -6,6 +8,7 @@ module.exports = {
     },
     mode: "production",
     output: {
+        publicPath: '/',
         path: path.resolve(__dirname, 'www'),
         filename: '[name].js'
     },

@@ -106,12 +106,14 @@
     <div id="click"><img src="../cookie.svg" id="image" /><div id="label">CONNECT</div></div>
     <div id="note"></div>
     <script>
-        var NFT;
-        if(!window.NFT){
-            document.getElementById('click').addEventListener('click', function(){
-                window.open(window.location.href, '_blank').focus();
-            })
+        function onLoad(){
+            if(!window.NFT){
+                document.getElementById('click').addEventListener('click', function(){
+                    window.open(window.location.href, '_blank').focus();
+                })
+            }
         }
+        window.addEventListener('load', onLoad);
     </script>
 </body>
 </html>
