@@ -1,5 +1,5 @@
 export var chainId = 80001;
-export const FortuneCookie_address = '0xa67A4cf846b9193282abA797Ab2C8C2eF5eBEdCD';
+export const FortuneCookie_address = '0x2D32b8A75bd9877CF33b3a031289c36cD5c10691';
 
 export const AlchemySettings = {
   url: "https://polygon-mumbai.g.alchemy.com/v2/wumsLrTVuYJZTrOAj85fldbU8x8dWncw"
@@ -168,6 +168,19 @@ export const FortuneCookie_ABI =  [
     "name": "addStandardMessage",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "animationURL",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -587,6 +600,19 @@ export const FortuneCookie_ABI =  [
   {
     "inputs": [
       {
+        "internalType": "string",
+        "name": "URL",
+        "type": "string"
+      }
+    ],
+    "name": "setAnimationURL",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address",
         "name": "operator",
         "type": "address"
@@ -912,4 +938,4 @@ export const FortuneCookie_ABI =  [
     "stateMutability": "nonpayable",
     "type": "function"
   }
-];
+]
