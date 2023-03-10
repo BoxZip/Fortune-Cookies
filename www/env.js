@@ -1,5 +1,5 @@
 export var chainId = 80001;
-export const FortuneCookie_address = '0x7187518DBe520c3a3b55Bee956F9a21D1AfD62D0';
+export const FortuneCookie_address = '0xa67A4cf846b9193282abA797Ab2C8C2eF5eBEdCD';
 
 export const AlchemySettings = {
   url: "https://polygon-mumbai.g.alchemy.com/v2/wumsLrTVuYJZTrOAj85fldbU8x8dWncw"
@@ -272,6 +272,25 @@ export const FortuneCookie_ABI =  [
       }
     ],
     "name": "isApprovedForAll",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "tokenID",
+        "type": "uint256"
+      }
+    ],
+    "name": "isCookieOpened",
     "outputs": [
       {
         "internalType": "bool",
