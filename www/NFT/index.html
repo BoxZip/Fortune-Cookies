@@ -19,6 +19,10 @@
             margin: 0;
             background-color: grey;
         }
+        *::selection{
+            background-color: black;
+            color:white;
+        }
         .active{
             transition: background-color 1s;
             background-color: #123497;
@@ -126,7 +130,7 @@
         }
     </style>
 </head>
-<body class="">
+<body>
     <div id="click"><img src="../cookie.svg" id="image" /><b id="label">CONNECT</b></div>
     <div id="note"></div>
 </body>
