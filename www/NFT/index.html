@@ -23,16 +23,17 @@
             transition: background-color 1s;
             background-color: #123497;
         }
-        .owner {
+        .opened{
+            background-color: yellow;
             transition: background-color 1s;
-            background-color: #129734;
         }
         .non-owner {
             transition: background-color 1s;
             background-color: #F97420;
         }
-        .opened{
-            background-color: yellow;
+        .owner {
+            transition: background-color 1s;
+            background-color: #129734;
         }
         #click{
             cursor: pointer;
@@ -97,13 +98,35 @@
             background-color: white;
             padding: 0.5em 0.5em;
             line-height: 1em;
-            box-shadow: 1em 1em 0px rgba(0,0,0,0.05);
+            box-shadow: 0.79em 0.79em 0px rgba(0,0,0,0.1);
             box-decoration-break: clone;
+            z-index: 1000;
+        }
+        #stats{
+            font-size: 0.75em;
+            list-style: none;
+            margin: 1em;
+            padding: 0;
+            position: absolute;
+            top: 0; left: 0;
+            font-family: 'Courier New', Courier, monospace;
+            text-align: left;
+            color: rgba(0,0,0,0.2);
+        }
+        #stats li{
+            line-height: 1.5em;
+        }
+        #stats li b{
+            display: inline-block;
+            width: 8em;
+        }
+        #stats li span{
+            color: rgba(0,0,0,0.4);
         }
     </style>
 </head>
 <body class="">
-    <div id="click"><img src="../cookie.svg" id="image" /><a id="label" href="" target="_parent">CONNECT</a></div>
+    <div id="click"><img src="../cookie.svg" id="image" /><b id="label">CONNECT</b></div>
     <div id="note"></div>
 </body>
 </html>

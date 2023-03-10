@@ -39,10 +39,33 @@ async function init(){
     NFT.note = document.getElementById('note');
 
     NFT.click.addEventListener('click', onClick);
-    NFT.note.addEventListener('click', onNoteClick);
 
     $.ethersProvider = await $.config.getProvider();
     FortuneCookieRead = new ethers.Contract(FortuneCookie_address, FortuneCookie_ABI, $.ethersProvider);
+
+    NFT.stats = document.createElement('ul');
+    NFT.stats.id = "stats";
+    
+    NFT.addStat = function(id, label, value){
+        let stat = document.createElement('li');
+        stat.id = id;
+        stat.innerHTML = "<b>"+label+'</b> <span class="value">'+value+"</span>";
+        NFT.stats.appendChild(stat);
+        return stat;
+    };
+    NFT.setStat = function(id, value){
+        document.querySelector('#'+id+' .value').innerHTML = value;
+    }
+
+    NFT.addStat('tokenID', 'Token ID', '---');
+    NFT.addStat('minted', 'Minted?', '---');
+    NFT.addStat('createdAt', 'Created @', '---');
+    NFT.addStat('createdBy', 'Created By', '---');
+    NFT.addStat('open', 'Open?', '---');
+    NFT.addStat('openedAt', 'Opened @', '---');
+    NFT.addStat('openedBy', 'Opened By', '---');
+
+    document.body.appendChild(NFT.stats);
 
     let query = window.location.search;
     if(query.length > 0) query = parseInt(query.slice(1));
@@ -50,19 +73,17 @@ async function init(){
     if(isNaN(query)) alert('Invalid TokenID!');
     else{
         NFT.tokenID = query;
+        NFT.setStat('tokenID', NFT.tokenID);
         await load();
         update();
     }
 }
 
 async function onClick(e){
-    e.preventDefault();
-    e.returnValue = false;
     if(!NFT.connected) await NFT.actions.connect();
-    else if(NFT.connected){
+    else if(NFT.connected && NFT.authorized){
         NFT.actions[NFT.action]();
     }
-    return false;
 }
 NFT.onClick = onClick;
 
@@ -75,7 +96,13 @@ async function load(){
         if(NFT.tokenID < 0 || NFT.tokenID >= _tokenID) alert('Invalid Token ID');
         else{
             try{
-                NFT.opened = await FortuneCookieRead.isCookieOpened(NFT.tokenID);
+                NFT.token = await FortuneCookieRead.tokens(NFT.tokenID);
+                NFT.minted = NFT.token[1];
+                NFT.createdAt = NFT.token[2];
+                NFT.createdBy = NFT.token[3];
+                NFT.open = NFT.token[4];
+                NFT.openedAt = NFT.token[5];
+                NFT.openedBy = NFT.token[6];
             }catch(e){
                 //
             }
@@ -84,10 +111,33 @@ async function load(){
     }
 }
 
+function timestampToString(time){
+    const date = new Date(time * 1000);
+    const datevalues = [
+    date.getFullYear(),
+    date.getMonth()+1,
+    date.getDate(),
+    date.getHours(),
+    date.getMinutes(),
+    date.getSeconds()
+    ];
+    return datevalues.join('-')
+}
+
 async function update(){
-    NFT.image.src = NFT.opened ? '../cookie-opened.svg' : '../cookie.svg';
-    NFT.action = NFT.opened ? 'read' : 'open';
-    if(NFT.opened) document.body.classList.add('opened');
+    NFT.image.src = NFT.open ? '../cookie-opened.svg' : '../cookie.svg';
+    NFT.action = NFT.open ? 'read' : 'open';
+    if(NFT.open) document.body.classList.add('opened');
+    NFT.setStat('minted', NFT.minted?"Yes":"No");
+    if(NFT.minted){
+        NFT.setStat('createdAt', timestampToString(NFT.createdAt));
+        NFT.setStat('createdBy', NFT.createdBy);
+        NFT.setStat('open', NFT.open ? "Yes" : "No");
+        if(NFT.open){
+            NFT.setStat('openedAt', timestampToString(NFT.openedAt));
+            NFT.setStat('openedBy', NFT.openedBy);
+        }
+    }
     if(typeof NFT.message == 'string'){
         let note = document.createElement('b');
         note.textContent = NFT.message;
@@ -101,9 +151,11 @@ async function update(){
 }
 
 async function updateUntilOpened(){
-    NFT.opened = await FortuneCookieRead.isCookieOpened(NFT.tokenID);
-    if(NFT.opened){
-        update();
+    NFT.open = await FortuneCookieRead.isCookieOpened(NFT.tokenID);
+    if(NFT.open){
+        NFT.openAt = (new Date()).getTime();
+        await update();
+        alert('The cookie has been cracked!\nOnce the transaction clears you can read the note inside.')
     }else{
         requestAnimationFrame(function(){ setTimeout(updateUntilOpened, 1000) })
     }
@@ -115,7 +167,7 @@ function connectedUpdate(){
     else if(sameAddress(NFT.owner,ACCOUNT)){
         document.body.classList.add('owner');
         NFT.authorized = true;
-        if(NFT.opened && typeof NFT.message !== 'string') read();
+        if(NFT.open && typeof NFT.message !== 'string') read();
     }
     else{
         alert("The wallet you are connected with does not hold this NFT.")
@@ -162,7 +214,10 @@ NFT.actions.open = open;
 async function read(){
     if(!NFT.authorized) alert('You must own this NFT in order to interact with it!');
     else if(typeof NFT.message == 'string') document.body.classList.add('reveal');
-    else if(NFT.opened){
+    else if(NFT.openAt){
+        if((new Date()).getTime() < NFT.openAt+(5000)) return;
+    }
+    if(NFT.open){
         try{
             NFT.message = await FortuneCookieWrite.read(NFT.tokenID);
             update();
