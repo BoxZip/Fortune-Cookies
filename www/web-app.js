@@ -8,15 +8,14 @@ let MINT_TOGGLE;
 let BGSTYLE;
 let cookie_array_HTML;
 let CONTRACT = {};
+let $;
 
-import { Network, Alchemy } from 'alchemy-sdk';
+import { Network, Alchemy, AlchemySubscription } from 'alchemy-sdk';
 import {ethers} from 'ethers';
 import { chainId, AlchemySettings, FortuneCookie_address, FortuneCookie_ABI } from './env.js';
 
 window.ethers = ethers;
 window.Alchemy = Alchemy;
-
-const $ = new Alchemy(AlchemySettings);
 
 const blockchains = {};
 
@@ -37,18 +36,28 @@ function toggleMintPage(){
 }
 
 async function init(){
+    
     blockchains[137] = {
         chainName: 'Polygon Mainnet',
         chainId: 137,
+        network: Network.MATIC_MAINNET,
         nativeCurrency: { name: 'MATIC', decimals: 18, symbol: 'MATIC' },
         rpcUrls: ['https://polygon-rpc.com/']
     };
     blockchains[80001] = {
         chainName: 'Polygon Mumbai',
         chainId: 80001,
+        network: Network.MATIC_MUMBAI,
         nativeCurrency: { name: 'MATIC', decimals: 18, symbol: 'MATIC' },
         rpcUrls: ['https://rpc-mumbai.maticvigil.com/']
     };
+
+    let config = {};
+    config.apiKey = AlchemySettings.apiKey;
+    config.network = blockchains[chainId].network;
+
+    $ = new Alchemy(config);
+
     let connectWallet = generateButton('Mint Now!', async function(e){
         toggleMintPage();
         await ethEnabled();
@@ -147,6 +156,7 @@ async function updatePageValues(){
 }
 
 async function mintStandard(){
+    if(CONTRACT.mintPaused) return alert('Minting is currently paused.');
     let quantity = parseInt(document.getElementById('standard_quantity').value);
     if(quantity<1) return alert('Quantity must be atleast 1');
     if(quantity>CONTRACT.maxQuantity) return alert('Quantity must be '+CONTRACT.maxQuantity+' or less');
@@ -160,6 +170,8 @@ async function mintStandard(){
 }
 
 async function mintCustom(){
+    if(CONTRACT.mintPaused) return alert('Minting is currently paused.');
+
     let quantity = parseInt(document.getElementById('custom_quantity').value);
     if(quantity<1) return alert('Quantity must be atleast 1');
     if(quantity>CONTRACT.maxQuantity) return alert('Quantity must be '+CONTRACT.maxQuantity+' or less');
@@ -227,6 +239,26 @@ function animateBG(){
     requestAnimationFrame(function(){ setTimeout(animateBG, 3000) });
 }
 
+let listeners = [];
+function onConnect(){
+    if(listeners.indexOf(ACCOUNT.toLowerCase()) == -1){
+        $.ws.on({
+            method: 'alchemy_minedTransactions',
+            addresses: [{"to": FortuneCookie_address, "from": ACCOUNT}]
+        }, handleTransactionResponse );
+        
+        listeners.push(ACCOUNT.toLowerCase());
+    } 
+}
+
+function handleTransactionResponse(txn){
+    if(txn.removed){
+        alert('Transaction reverted. \nCheck etherscan for more information.');
+    }else{
+        alert('Transaction confirmed!')
+    }
+}
+
 const ethEnabled = async () => {
     if (window.ethereum) {
         ethersProvider = new ethers.providers.Web3Provider(window.ethereum);
@@ -238,7 +270,10 @@ const ethEnabled = async () => {
         FortuneCookieWrite = new ethers.Contract(FortuneCookie_address, FortuneCookie_ABI, ethersSigner);
         window.ethereum.on('accountsChanged', function (accounts) {
             ACCOUNT = accounts[0];
+            onConnect();
         });
+
+        if(ACCOUNT) onConnect();
 
         await chainSwitchInstall(chainId);
         return true;  

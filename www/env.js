@@ -1,7 +1,8 @@
 export var chainId = 80001;
-export const FortuneCookie_address = '0x9b012d5EcCE399e30fD3229f93B3fAb3e3B4EAD5';
+export const FortuneCookie_address = '0xcF7ed63eF72C8f5053F092aB4c14e42009435947';
 
 export const AlchemySettings = {
+  apiKey: "wumsLrTVuYJZTrOAj85fldbU8x8dWncw",
   url: "https://polygon-mumbai.g.alchemy.com/v2/wumsLrTVuYJZTrOAj85fldbU8x8dWncw"
 };
 

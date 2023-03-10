@@ -50,8 +50,6 @@ contract FortuneCookie is ERC721Enumerable, Ownable {
         address openedBy;
     }
 
-    event Mint(address indexed minter, bool custom, uint256 quantity, uint256[] tokenIds);
-
     constructor(uint256 supply, uint256 _priceStandard, uint256 _priceCustom, uint256 maxLength, uint256 maxQuantity)
 		ERC721('Fortune Cookie', '$COOKIE')
 	{
@@ -265,12 +263,9 @@ contract FortuneCookie is ERC721Enumerable, Ownable {
     validateEthPayment(false, quantity)
 	{
         require(!pausedMint, 'minting is currently paused');
-        uint[] memory tokenIds;
         for(uint i=0; i<quantity; i++){
-            tokenIds[i] = _tokenID;
             _mintStandard(msg.sender);
         }
-        emit Mint(msg.sender, false, quantity, tokenIds);
     }
     function mintCustom(uint256 quantity, string memory message) 
     external
@@ -280,12 +275,9 @@ contract FortuneCookie is ERC721Enumerable, Ownable {
 	{
         require(!pausedMint, 'minting is currently paused');
         require(strlen(message) <= maxMessageLength, 'message is longer than maximum length');
-        uint[] memory tokenIds;
         for(uint i=0; i<quantity; i++){
-            tokenIds[i] = _tokenID;
             _mintCustom(msg.sender, message);
         }
-        emit Mint(msg.sender, true, quantity, tokenIds);
     }
     function open(uint256 tokenID) external {
         require(tokens[tokenID].minted == true, 'This token does not exist');
