@@ -9,7 +9,7 @@ let FortuneCookieWrite;
 
 window.NFT = NFT;
 
-const $ = new Alchemy(AlchemySettings);
+const $ = new Alchemy({url: AlchemySettings.url});
 
 NFT.connected = false;
 
