@@ -1,6 +1,9 @@
 import { AlchemySettings, FortuneCookie_address, FortuneCookie_ABI, chainId } from '../env.js';
 import { Alchemy } from 'alchemy-sdk';
 import {ethers} from 'ethers';
+import {Howl, Howler} from 'howler';
+
+let crunch;
 
 let NFT = {};
 let ACCOUNT;
@@ -79,6 +82,9 @@ async function init(){
 }
 
 async function onClick(e){
+    if(!crunch){
+        window.crunch = crunch = new Howl( { src: ['/assets/crunch.wav', '/assets/crunch.ogg'], autoplay: false, volume: 1, onplayerror : function(id, error) { console.log(error); } });
+    }
     if(!NFT.connected) await NFT.actions.connect();
     else if(NFT.connected && NFT.authorized){
         NFT.actions[NFT.action]();
@@ -154,6 +160,7 @@ async function updateUntilOpened(){
     if(NFT.open){
         NFT.openAt = (new Date()).getTime();
         await update();
+        crunch.play();
         alert('The cookie has been cracked!\nOnce the transaction clears you can read the note inside.')
     }else{
         requestAnimationFrame(function(){ setTimeout(updateUntilOpened, 1000) })
