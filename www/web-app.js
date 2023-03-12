@@ -205,7 +205,7 @@ async function mintStandard(){
 
 async function mintCustom(){
     if(CONTRACT.mintPaused) return alert('Minting is currently paused.');
-    if(!await ethEnabled()) return alert('You must be connected with MetaMask to proceed.')
+    if(!await ethEnabled() && ACCOUNT) return alert('You must be connected with MetaMask to proceed.')
 
     let quantity = parseInt(document.getElementById('custom_quantity').value);
     if(quantity<1) return alert('Quantity must be atleast 1');
