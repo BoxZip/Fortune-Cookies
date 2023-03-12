@@ -1,4 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;900&display=swap');
+html{
+    background-color: #797979;
+}
 body{
     display: grid;
     grid-template-columns: [main-start] 1fr [content-start] 2fr [content-end] 1fr [main-end];
@@ -10,7 +13,7 @@ body{
     position: relative;
     overflow: hidden;
     color: rgba(0,0,0,0.97);
-    background-color: grey;
+    background-color: #797979;
     z-index: 1000;
 }
 html{

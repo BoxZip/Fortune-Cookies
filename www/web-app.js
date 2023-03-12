@@ -282,8 +282,8 @@ function animateBG(){
     (Math.random() <= 0.05) ? BGDIR = -BGDIR : null;
     if(!BGSTYLE) BGSTYLE = document.body.appendChild(document.createElement('style'));
     BGSTYLE.id = 'BGSTYLE';
-    let values = Math.abs(BG%360)+", "+25+"%, "+LUM+"%";
-    BGSTYLE.innerText = ".BG, body, #mint button, .showMint #connect { background-color: hsl("+values+"); }  #mint h1 { color: hsl("+values+"); } #main_page b, #main_page u, #main_page i{ transition: background-color 2.97s; background-color: hsla("+values+", 0.5); }";
+    let values = Math.abs(BG%360)+", "+100+"%, "+50+"%";
+    BGSTYLE.innerText = ".BG, body, #mint button, .showMint #connect { background-color: hsla("+values+",0.5); }  #mint h1 { color: hsl("+values+"); } #main_page b, #main_page u, #main_page i{ transition: background-color 2.97s; background-color: hsla("+values+", 0.5); }";
     requestAnimationFrame(function(){ setTimeout(animateBG, 3000) });
 }
 
