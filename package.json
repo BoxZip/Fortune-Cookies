@@ -10,10 +10,11 @@
     "verify": "npx hardhat run --network polygon_mumbai scripts/verify.js",
     "upload": "npx hardhat run --network polygon_mumbai scripts/uploadMessages.js",
     "setup": "npx hardhat run --network polygon_mumbai scripts/setupContract.js",
+    "pause": "npx hardhat run --network polygon_mumbai scripts/togglePause.js",
     "deploy-production": "npx hardhat run --network polygon_mainnet scripts/deploy_hardhat.js",
     "verify-production": "npx hardhat run --network polygon_mainnet scripts/verify.js",
     "upload-production": "npx hardhat run --network polygon_mainnet scripts/uploadMessages.js",
-    "setup-production": "npx hardhat run --network polygon_mainnet scripts/setupContract.js"
+    "pause-production": "npx hardhat run --network polygon_mainnet scripts/togglePause.js"
   },
   "author": "",
   "license": "ISC",
