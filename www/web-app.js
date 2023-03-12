@@ -283,7 +283,7 @@ function animateBG(){
     if(!BGSTYLE) BGSTYLE = document.body.appendChild(document.createElement('style'));
     BGSTYLE.id = 'BGSTYLE';
     let values = Math.abs(BG%360)+", "+100+"%, "+50+"%";
-    BGSTYLE.innerText = ".BG, body, #mint button, .showMint #connect { background-color: hsla("+values+",0.5); }  h1 { color: hsl("+values+"); } #main_page b, #main_page u, #main_page i{ transition: background-color 2.97s; background-color: hsla("+values+", 0.5); }";
+    BGSTYLE.innerText = ".BG, body, #mint button, .showMint #connect { transition: background-color 2.97s; background-color: hsla("+values+",0.5); }  h1 { transition: color 2.97s; color: hsl("+values+"); } #main_page b, #main_page u, #main_page i{ transition: background-color 2.97s; background-color: hsla("+values+", 0.5); }";
     requestAnimationFrame(function(){ setTimeout(animateBG, 3000) });
 }
 
