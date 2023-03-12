@@ -184,9 +184,12 @@ async function getNonce(address) {
 async function mintStandard(){
     if(CONTRACT.mintPaused) return alert('Minting is currently paused.');
     if(!await ethEnabled() && ACCOUNT) return alert('You must be connected with MetaMask to proceed.')
+    if(await ethersProvider.getNetwork() !== chainId) return alert("Please switch to your MetaMask to use the Polygon Network and try again.")
+
     let quantity = parseInt(document.getElementById('standard_quantity').value);
     if(quantity<1) return alert('Quantity must be atleast 1');
     if(quantity>CONTRACT.maxQuantity) return alert('Quantity must be '+CONTRACT.maxQuantity+' or less');
+    
     try{
         let gasFee = await getGasPrice();
         let nonce = await getNonce(ACCOUNT);
@@ -206,6 +209,7 @@ async function mintStandard(){
 async function mintCustom(){
     if(CONTRACT.mintPaused) return alert('Minting is currently paused.');
     if(!await ethEnabled() && ACCOUNT) return alert('You must be connected with MetaMask to proceed.')
+    if(await ethersProvider.getNetwork() !== chainId) return alert("Please switch to your MetaMask to use the Polygon Network and try again.")
 
     let quantity = parseInt(document.getElementById('custom_quantity').value);
     if(quantity<1) return alert('Quantity must be atleast 1');
@@ -214,6 +218,7 @@ async function mintCustom(){
     let message = document.getElementById('customMSG').value;
     if(message.length > CONTRACT.maxMessageLength) return alert('Message length must not exceed '+CONTRACT.maxMessageLength+' characters')
     if(message.split(/[ ]+/).join('').length == 0) return alert('The message is blank')
+    
     try{
         let gasFee = await getGasPrice();
         let nonce = await getNonce(ACCOUNT);
@@ -309,7 +314,6 @@ const ethEnabled = async () => {
         let accounts = await window.ethereum.request({method: 'eth_requestAccounts'});
         ACCOUNT = accounts[0]
         
-        FortuneCookieWrite = new ethers.Contract(FortuneCookie_address, FortuneCookie_ABI, ethersSigner);
         window.ethereum.on('accountsChanged', function (accounts) {
             ACCOUNT = accounts[0];
             onConnect();
@@ -318,6 +322,9 @@ const ethEnabled = async () => {
         if(ACCOUNT) onConnect();
 
         await chainSwitchInstall(chainId);
+
+        if(await ethersProvider.getNetwork() == chainId) FortuneCookieWrite = new ethers.Contract(FortuneCookie_address, FortuneCookie_ABI, ethersSigner);
+
         return true;  
     }  
     return false;
