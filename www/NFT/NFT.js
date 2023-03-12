@@ -124,7 +124,7 @@ function timestampToString(time){
 }
 
 async function update(){
-    NFT.image.src = NFT.open ? '../cookie-opened.svg' : '../cookie.svg';
+    NFT.image.src = NFT.open ? '/assets/cookie-opened.svg' : '/assets/cookie.svg';
     NFT.action = NFT.open ? 'read' : 'open';
     if(NFT.open) document.body.classList.add('opened');
     NFT.setStat('minted', NFT.minted?"Yes":"No");

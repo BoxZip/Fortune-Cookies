@@ -12,7 +12,15 @@ let $;
 
 import { Network, Alchemy, AlchemySubscription } from 'alchemy-sdk';
 import {ethers} from 'ethers';
+import {Howl, Howler} from 'howler';
 import { chainId, AlchemySettings, FortuneCookie_address, FortuneCookie_ABI } from './env.js';
+/*/
+const AudioContext = window.AudioContext || window.webkitAudioContext;
+const audioContext = new AudioContext();
+audioContext.pause();
+/*/
+let crunch;
+window.crunch = crunch;
 
 window.ethers = ethers;
 window.Alchemy = Alchemy;
@@ -35,8 +43,16 @@ function toggleMintPage(){
     document.getElementById('connect').textContent = MINT_TOGGLE ? "◀ Back" : "Mint Now!";
 }
 
+
+function playCrunchNoise(){
+    //audioContext.resume();
+    if(!crunch){
+        window.crunch = crunch = new Howl( { src: ['/assets/crunch.wav', '/assets/crunch.ogg'], autoplay: false, volume: 1, onplayerror : function(id, error) { console.log(error); } });
+    }
+    crunch.play();
+}
+
 async function init(){
-    
     blockchains[137] = {
         chainName: 'Polygon Mainnet',
         chainId: 137,
@@ -71,10 +87,10 @@ async function init(){
 
     let cookie_array = document.getElementById('cookie_array');
 
-    var openCookie = function(e){ console.log(e.target); if(e.target.tagName.toUpperCase() == 'IMG') e.target.src = 'cookie-opened.svg'; };
+    var openCookie = function(e){ console.log(e.target); if(e.target.tagName.toUpperCase() == 'IMG'){ if(e.target.src.split('/').slice(-1)[0] == 'cookie.svg') playCrunchNoise(); e.target.src = '/assets/cookie-opened.svg'; } };
 
     if(window.outerWidth > 749) {
-        cookie_array_HTML = buildCookieArray('<img src="cookie.svg" width="256px" height="256px" />', 32, 32, 2000, 2000, -1);
+        cookie_array_HTML = buildCookieArray('<img src="/assets/cookie.svg" width="256px" height="256px" />', 32, 32, 2000, 2000, -1);
         cookie_array.innerHTML = cookie_array_HTML;
     }
     [].slice.call(cookie_array.childNodes).forEach((node)=>node.addEventListener('click', openCookie));
@@ -140,9 +156,7 @@ async function updatePageValues(){
     [].slice.call(document.querySelectorAll('.totalsupply')).forEach(async function(el){
         el.innerText = totalSupply;
     });
-    /*/
-    /// Leave prices to reflect production cost rather than development
-    ///
+
     let priceCustom = await FortuneCookieRead.priceCustom();
     [].slice.call(document.querySelectorAll('.customprice')).forEach(async function(el){
         el.innerText = weiToEther(priceCustom) + ' MATIC';
@@ -151,7 +165,7 @@ async function updatePageValues(){
     [].slice.call(document.querySelectorAll('.standardprice')).forEach(async function(el){
         el.innerText = weiToEther(priceStandard) + ' MATIC';
     });
-    /*/
+
     updateDynamicValues();
 }
 
@@ -203,7 +217,7 @@ function buildCookieArray(img, x, y, xOffset, yOffset, zOffset, spread){
     let c = 0;
     for(var i=1; i<=x; i++){
         for(var j=1; j<=y; j++){
-            html += '<img src="cookie.svg" style="translate: '+((xOffset*Math.pow(j, 0.79)*(2/i))+xAll)+'px '+((yOffset*Math.pow(i, 0.5)*(1/i))+yAll)+'px; scale: '+(2/i)+' '+(2/i)+' 1; z-index: '+(zOffset*i*j)+';"/>';
+            html += '<img src="/assets/cookie.svg" style="translate: '+((xOffset*Math.pow(j, 0.79)*(2/i))+xAll)+'px '+((yOffset*Math.pow(i, 0.5)*(1/i))+yAll)+'px; scale: '+(2/i)+' '+(2/i)+' 1; z-index: '+(zOffset*i*j)+';"/>';
             c++;
         }
         html += '</div>';
@@ -235,7 +249,7 @@ function animateBG(){
     if(!BGSTYLE) BGSTYLE = document.body.appendChild(document.createElement('style'));
     BGSTYLE.id = 'BGSTYLE';
     let values = Math.abs(BG%360)+", "+25+"%, "+LUM+"%";
-    BGSTYLE.innerText = ".BG, body, #mint button, .showMint #connect { background-color: hsl("+values+"); }  #mint h1 { color: hsl("+values+"); } #main_page { color: hsla("+values+", 0.92); }";
+    BGSTYLE.innerText = ".BG, body, #mint button, .showMint #connect { background-color: hsl("+values+"); }  #mint h1 { color: hsl("+values+"); } #main_page b, #main_page u, #main_page i{ transition: background-color 2.97s; background-color: hsla("+values+", 0.5); }";
     requestAnimationFrame(function(){ setTimeout(animateBG, 3000) });
 }
 

@@ -8,6 +8,11 @@ module.exports = {
     },
     mode: "production",
     output: {
+        clean: {
+            keep(asset) {
+                return asset.includes('assets/') || asset.includes('index') || asset.includes('env.js') || asset.includes('web-app.js')|| asset.includes('NFT.js');
+            }
+        },
         publicPath: '/',
         path: path.resolve(__dirname, 'www'),
         filename: '[name].js'

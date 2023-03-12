@@ -8,7 +8,12 @@
     "compile": "npx hardhat compile",
     "deploy": "npx hardhat run --network polygon_mumbai scripts/deploy_hardhat.js",
     "verify": "npx hardhat run --network polygon_mumbai scripts/verify.js",
-    "upload": "npx hardhat run --network polygon_mumbai scripts/uploadMessages.js"
+    "upload": "npx hardhat run --network polygon_mumbai scripts/uploadMessages.js",
+    "setup": "npx hardhat run --network polygon_mumbai scripts/setupContract.js",
+    "deploy-production": "npx hardhat run --network polygon_mainnet scripts/deploy_hardhat.js",
+    "verify-production": "npx hardhat run --network polygon_mainnet scripts/verify.js",
+    "upload-production": "npx hardhat run --network polygon_mainnet scripts/uploadMessages.js",
+    "setup-production": "npx hardhat run --network polygon_mainnet scripts/setupContract.js"
   },
   "author": "",
   "license": "ISC",
@@ -27,6 +32,7 @@
     "webpack-cli": "^5.0.1"
   },
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "howler": "^2.2.3"
   }
 }

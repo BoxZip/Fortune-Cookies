@@ -10,7 +10,6 @@ body{
     position: relative;
     overflow: hidden;
     color: rgba(0,0,0,0.97);
-    font-size: calc((2vw + 1vh)/2);
     background-color: grey;
     z-index: 1000;
 }
@@ -57,36 +56,20 @@ h3{
     height: 100vh;
     overflow-y: auto;
     z-index: 10000;
+    padding: 0;
 }
 #mint{
     background-color: white;
     position: relative;
-    left: -100vw;
-    top: 0;
-    width: 50vw;
-    transition: left 0.5s, top 0.5s, opacity 1.5s;
-    opacity: 0;
     padding: 0 0;
     text-align: center;
-    visibility: collapse;
-}
-.showMint #mint{
-    grid-row-start: main-start;
-    grid-row-end: main-end;
-    grid-column-start: content-start;
-    grid-column-end: content-end;
-    top:0;left:0;
-    opacity: 1;
-    visibility: visible;
-    overflow-y: auto;
 }
 #main_page img{
     display: inline-block;
-    width: min(25vw,25vh);
-    transform-origin: 50% 50%;
-    top: 6vh;
-    right:0;
-    position: absolute;
+    position: relative;
+    top:7vh;
+    right: 0;
+    width: min(50vh, 50vw);
 }
 h1{
     color: white;
@@ -119,6 +102,7 @@ h3{
 }
 input{
     border: 0;
+    font-size: inherit;
     background-color: rgba(127,127,127,0.1);
     font-weight: 800;
     padding: 0.5em;
@@ -126,6 +110,7 @@ input{
     width: 5em;
 }
 button{
+    font-size: inherit;
     border: 0;
     font-weight: 800;
     padding: 0.5em;
@@ -139,6 +124,7 @@ button{
     height: 50vh;
     max-height: 5em;
     margin: 0 auto;
+    font-size: inherit;
 }
 #connect{
     background-color: white;
@@ -147,6 +133,7 @@ button{
     right: 2vw;
     padding: 2vh 2vw;
     z-index: 10000;
+    visibility: collapse;
 }
 #connect:hover{
     background-color: rgba(255,255,255,0.79)!important;
@@ -154,14 +141,12 @@ button{
 
 #main_page{
     transition: opacity 1s;
-    color: #797979;
+    color: white;
     background-color: rgba(10,10,10,0.95);
-    grid-column-start: content-start;
-    grid-column-end: content-end;
-    grid-row-start: main-start;
-    grid-row-end: main-end;
-    height: 100vh;
-    overflow-y: auto;
+    padding: 1em;
+}
+#main_page h3{
+    color: black;
 }
 #main_page p, #main_page h3{
     margin-left: 2vw;
@@ -174,7 +159,10 @@ button{
     color: white;
     font-weight: 800;
 }
-#main_page b, #main_page u{
+#main_page b, #main_page u, #main_page i{
+    padding: 0.1em 0.4em;
+    line-height: 1.25em;
+    box-decoration-break: clone;
     color: white;
 }
 #mint b, #mint .bold, #mint u{
@@ -188,6 +176,13 @@ button{
     background-color: transparent;
     padding: 0.5em;
 }
+#main_page .hilite {
+    background-color: white;
+    color: black!important;
+}
+#main_page .hilite b, #main_page .hilite i {
+    color: black!important;
+}
 #main_page h1{
     font-size: 4em;
     letter-spacing: -2px;
@@ -195,7 +190,7 @@ button{
 }
 #info{
     background-color: white;
-    margin-bottom: 10vh;
+    padding-bottom: 10vh;
 }
 #info h2{
     color:white;
@@ -220,22 +215,12 @@ h3 b, h3 u{
         transform-origin: 50% 50%;
     }
     .page {
-        width: 90vw;
-        margin: 0 0;
-        height: 100vh;
-        height: -webkit-fill-available;
+        width: calc(100vw - 2em);
+        margin: 1em;
+        height: calc(100vh - 2em);
     }
     #main_page{
         position: relative;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        height: -webkit-fill-available;
-        top: 0;
-        grid-column-start: main-start;
-        grid-column-end: main-end;
-        grid-row-start: main-start;
-        grid-row-end: main-end;
         background-color: rgba(0,0,0,0.69);
     }
     #main_page img{
@@ -249,31 +234,8 @@ h3 b, h3 u{
     }
     #mint{
         background-color: white;
-        grid-column-start: main-start;
-        grid-column-end: main-end;
-        grid-row-start: main-start;
-        grid-row-end: main-end;
-        left: -100vw;
-        top: 0;
-        width: auto;
-        margin: 0 auto;
-        height: 100vh;
-        height: -webkit-fill-available;
-        padding: 0;
-        opacity: 0;
-        visibility: collapse;
+        padding: 1em;
         position: relative;
-    }
-    .showMint #mint{
-        right: auto;top:auto;
-        left: auto;bottom: auto;
-        grid-column-start: main-start;
-        grid-column-end: main-end;
-        grid-row-start: main-start;
-        grid-row-end: main-end;
-        padding: 0;        
-        opacity: 1;
-        visibility: visible;
     }
     #customMSG{
         width:80vw;

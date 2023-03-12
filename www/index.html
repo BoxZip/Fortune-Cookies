@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     
         <title>Fortune Cookie On-Chain NFT</title>
 
@@ -18,50 +18,52 @@
 </head>
 <body>
     <div id="cookie_array" class="array"></div>
-
-    <div id="main_page" class="page">
-        <img src="cookie.svg"/><h1>Fortune Cookie</h1>
-        <h2>A crispy cookie shell, concealing a secret message.</h2>
-        <h3>What does your future have in store?</h3>
-        <p><b>Fortune Cookie On-Chain NFT</b> is an open edition with a supply of <u><span class="totalsupply">1,000,000</span> tokens</u>.</p>
-        <p><b>Fortune Cookies</b> are <u>On-Chain Non-Fungible Tokens</u>, which means their data is hosted completely on the blockchain. It doesn't require IPFS or a HTTP/S webserver to provide hosting for the metadata and image files.</p>
-        <p><b>Fortune Cookies</b> are <i>minted with a secret message hidden inside them</i>. It is hidden until the owner of the NFT opens the cookie to reveal the message.</p>
-        <p>You can only open and read the <b>Fortune Cookies that you own</b>.</p>
-        <p><b>Fortune Cookies</b> can be transfered after being opened; or before, while the mystery remains intact.</p>
-        <h3>Minting is <b class="mintstatus">paused</b>.</h3>
-    </div>
-    <div id="mint" class="page">
-        <img src="cookie.svg"/>
-        <h1><b>Standard</b> Fortune Cookie</h1>
-        <h3>Randomly selected at mint</h3>
-        <p>Generic cookies, with a randomly selected message inside.<br>
-            You can mint up to <u class="maxquantity">9</u> at once. Each one will have a random message hidden inside.</p>
-        <p>How many would you like to mint at once? (1-<span class="maxquantity">9</span>)</p>
-        <p class="mint"><input id="standard_quantity" type="number" min="1" max="9" value="1"/><button id="standard_mint">Mint Standard Cookies!</button>
-        </p>
-        <img src="cookie.svg"/>
-        <h1><b>Custom</b> Fortune Cookie</h1>
-        <h3>Custom message decided before minting</h3>
-        <p>The same crispy cookie shell, but this time concealing a message that <b>you write yourself ...</b></p>
-        <p>Your message can be up to <u class="maxmessagelength">256</u> characters long.</p>
-        <textarea id="customMSG" placeholder="A message which describes the fortune of the person who opens this cookie." maxlength="256"></textarea>
-        <p class="bold">How many would you like to <u>mint with this message</u>? (1-<span class="maxquantity">9</span>)</p>
-        <p>They will each have the message you enter above as their secret message.</p>
-        <p class="mint"><input id="custom_quantity" type="number" min="1" max="9" value="1"/><button id="custom_mint">Mint <span>1</span> Custom!</button>
-        </p>
-        <img src="cookie.svg"/>
-    <div id="info">
-        <h1>Minting Information</h1>
-        <p><b>Standard Fortune Cookie:</b> <u class="standardprice">1 MATIC</u> each</p>
-        <p><b>Custom Fortune Cookie:</b> <u class="customprice">10 MATIC</u> each</p>
-        <p><b>Maximum Collection Size:</b> <u class="totalsupply">1,000,000</u> tokens</p>
-        <p><b>Maximum Minted At Once:</b> <u class="maxquantity">9</u> tokens</p>
-        </p>
-        <img src="cookie.svg"/>
-        <h3>A total of <b class="tokencount">0</b> have been minted.</h3>
-        <img src="cookie-opened.svg"/>
-        <h3>A total of <b class="openedcount">0</b> have been opened.</h3>
-    </div>
+    <div id="page_container" class="page">
+        <div id="main_page">
+            <img src="/assets/cookie.svg"/><h1>Fortune Cookie</h1>
+            <h2>A crispy cookie shell, concealing a secret message.</h2>
+            <h3>What does your future have in store?</h3>
+            <p><b>Fortune Cookie On-Chain NFT</b> is an open edition with a supply of <u><span class="totalsupply">1,000,000</span> tokens</u>.</p>
+            <p><b>Fortune Cookies</b> are <u>On-Chain Non-Fungible Tokens</u>, which means their data is hosted completely on the blockchain. They don't require IPFS or a HTTP/S webserver to provide hosting for the metadata and image files.</p>
+            <p class="hilite"><b>Fortune Cookies</b> are <i>minted with a secret message hidden inside them</i>.</p>
+            <p>The message is hidden until the owner of the NFT opens the cookie to reveal what is inside.</p>
+            <p><b>You can only open and read the Fortune Cookies that you own</b>.</p>
+            <p><b>Fortune Cookies</b> can be transfered after being opened; or before, while the mystery remains intact.</p>
+            <h3>Minting is <b class="mintstatus">paused</b>.</h3>
+        </div>
+        <div id="mint">
+            <img src="/assets/cookie.svg"/>
+            <h1><b>Standard</b> Fortune Cookie</h1>
+            <h3>Randomly selected at mint</h3>
+            <p>Generic cookies, with a randomly selected message inside.<br>
+                You can mint up to <u class="maxquantity">9</u> at once. Each one will have a random message hidden inside.</p>
+            <p>How many would you like to mint at once? (1-<span class="maxquantity">9</span>)</p>
+            <p class="mint"><input id="standard_quantity" type="number" min="1" max="9" value="1"/><button id="standard_mint">Mint Standard Cookies!</button>
+            </p>
+            <img src="/assets/cookie.svg"/>
+            <h1><b>Custom</b> Fortune Cookie</h1>
+            <h3>Custom message decided before minting</h3>
+            <p>The same crispy cookie shell, but this time concealing a message that <b>you write yourself ...</b></p>
+            <p>Your message can be up to <u class="maxmessagelength">256</u> characters long.</p>
+            <textarea id="customMSG" placeholder="A message which describes the fortune of the person who opens this cookie." maxlength="256"></textarea>
+            <p class="bold">How many would you like to <u>mint with this message</u>? (1-<span class="maxquantity">9</span>)</p>
+            <p>They will each have the message you enter above as their secret message.</p>
+            <p class="mint"><input id="custom_quantity" type="number" min="1" max="9" value="1"/><button id="custom_mint">Mint <span>1</span> Custom!</button>
+            </p>
+            <img src="/assets/cookie.svg"/>
+        <div id="info">
+            <h1>Minting Information</h1>
+            <p><b>Standard Fortune Cookie:</b> <u class="standardprice">1 MATIC</u> each</p>
+            <p><b>Custom Fortune Cookie:</b> <u class="customprice">10 MATIC</u> each</p>
+            <p><b>Maximum Collection Size:</b> <u class="totalsupply">1,000,000</u> tokens</p>
+            <p><b>Maximum Quantity Per Mint:</b> <u class="maxquantity">9</u> tokens</p>
+            </p>
+            <img src="/assets/cookie.svg"/>
+            <h3>A total of <b class="tokencount">0</b> have been minted.</h3>
+            <img src="/assets/cookie-opened.svg"/>
+            <h3>A total of <b class="openedcount">0</b> have been opened.</h3>
+        </div>
+        </div>
     </div>
 </body>
 </html>

@@ -104,9 +104,6 @@ contract FortuneCookie is ERC721Enumerable, Ownable {
             standardMessages[_numStandardMessages++] = messages[i];
         }
     }
-    function numStandardMessages() public view onlyOwner returns(uint){
-        return _numStandardMessages;
-    }
 
     function updateCookieSVG(string calldata svg_code) external onlyOwner {
         cookieSVG = svg_code;
@@ -120,6 +117,8 @@ contract FortuneCookie is ERC721Enumerable, Ownable {
     function burn(uint256 tokenID) public virtual {
         require(_isApprovedOrOwner(_msgSender(), tokenID), "FortuneCookie: caller is not owner nor approved");
         _burn(tokenID);
+        NFT memory token;
+        _setToken(tokenID, token);
     }
     function tokenCount() public view returns(uint){
         return _tokenID;
@@ -279,7 +278,7 @@ contract FortuneCookie is ERC721Enumerable, Ownable {
             _mintCustom(msg.sender, message);
         }
     }
-    function open(uint256 tokenID) external {
+    function open(uint256 tokenID) public virtual {
         require(tokens[tokenID].minted == true, 'This token does not exist');
         require(ownerOf(tokenID) == msg.sender, 'You must be the owner this token to crack open the fortune cookie');
         require(tokens[tokenID].open == false, 'This fortune cookie has already been opened');
@@ -288,7 +287,7 @@ contract FortuneCookie is ERC721Enumerable, Ownable {
         tokens[tokenID].openedBy = _msgSender();
         totalOpened++;
     }
-    function read(uint256 tokenID) external view returns (string memory){
+    function read(uint256 tokenID) public virtual view returns (string memory){
         require(tokens[tokenID].minted == true, 'This token does not exist');
         require(ownerOf(tokenID) == msg.sender, 'You must be the owner this token to read the message');
         require(tokens[tokenID].open == true, 'You must crack open the fortune cookie before you can read the message');

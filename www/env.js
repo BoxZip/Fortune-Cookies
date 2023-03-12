@@ -1,9 +1,9 @@
-export var chainId = 80001;
-export const FortuneCookie_address = '0xcF7ed63eF72C8f5053F092aB4c14e42009435947';
+export var chainId = 137;
+export const FortuneCookie_address = '0xDD1D2cD4C451d089B1960491C65d5AB4d64a2453';
 
 export const AlchemySettings = {
-  apiKey: "wumsLrTVuYJZTrOAj85fldbU8x8dWncw",
-  url: "https://polygon-mumbai.g.alchemy.com/v2/wumsLrTVuYJZTrOAj85fldbU8x8dWncw"
+  apiKey: "tOBktJTVly_wPAel3juIXMRcmxbMd5Gt",
+  url: "https://polygon-mainnet.g.alchemy.com/v2/tOBktJTVly_wPAel3juIXMRcmxbMd5Gt"
 };
 
 export const FortuneCookie_ABI =  [
@@ -86,37 +86,6 @@ export const FortuneCookie_ABI =  [
       }
     ],
     "name": "ApprovalForAll",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "minter",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "bool",
-        "name": "custom",
-        "type": "bool"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "quantity",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256[]",
-        "name": "tokenIds",
-        "type": "uint256[]"
-      }
-    ],
-    "name": "Mint",
     "type": "event"
   },
   {
@@ -432,19 +401,6 @@ export const FortuneCookie_ABI =  [
   {
     "inputs": [],
     "name": "numCustomMinted",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "numStandardMessages",
     "outputs": [
       {
         "internalType": "uint256",

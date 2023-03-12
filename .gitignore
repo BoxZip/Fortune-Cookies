@@ -1,13 +1,15 @@
 node_modules
 @openzeppelin
 artifacts
-*/artifacts
-assets
+/artifacts
+assets/
+!www/assets/
 cache
 scripts
 .env
+debugging
 compiler_config.json
 hardhat.config.js
 package-lock.json
-webpack.config.js
 remix-compiler.config.js
+www copy
