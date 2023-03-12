@@ -202,7 +202,8 @@ async function mintStandard(){
         console.log(receipt);
         alert('Transaction successful!');
     }catch(err){
-        alert('There was an error while your transaction was being processed:\n\n'+err.message);
+        alert('There was an error while your transaction was being processed:\n\n'+err.data.message);
+        console.log(err);
     }
 }
 
@@ -231,8 +232,8 @@ async function mintCustom(){
         console.log(receipt);
         alert('Transaction pending.\nPlease wait for your transaction to be verified on the blockchain...');
     }catch(err){
-        alert('There was an error while your transaction was being processed:\n\n'+err.message);
-        console.log(err.message);
+        alert('There was an error while your transaction was being processed:\n\n'+err.data.message);
+        console.log(err);
     }
 }
 
