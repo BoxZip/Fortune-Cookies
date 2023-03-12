@@ -187,7 +187,7 @@ async function connect(){
     if(await ethEnabled()){
         if(ACCOUNT){
             NFT.connected = true;
-            FortuneCookieWrite = new ethers.Contract(FortuneCookie_address, FortuneCookie_ABI, NFT.signer);
+            
             document.body.classList.add('active');
             update();
         }
@@ -236,6 +236,9 @@ NFT.actions.read = read;
 
 const ethEnabled = async () => {
     if (window.ethereum) {
+
+        await chainSwitchInstall(chainId);
+        
         NFT.ethersProvider = new ethers.providers.Web3Provider(window.ethereum);
         NFT.signer = NFT.ethersProvider.getSigner();
 
@@ -246,7 +249,8 @@ const ethEnabled = async () => {
             ACCOUNT = accounts[0];
         });
 
-        await chainSwitchInstall(chainId);
+        FortuneCookieWrite = new ethers.Contract(FortuneCookie_address, FortuneCookie_ABI, NFT.signer);
+
         return true;  
     }  
     return false;
