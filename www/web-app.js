@@ -172,8 +172,9 @@ async function updatePageValues(){
 }
 
 async function getGasPrice() {
-    let feeData = (await ethersProvider.getGasPrice()).toNumber()
-    return feeData
+    let feeData = (await ethersProvider.getGasPrice()).toNumber();
+    let feeMultiplier = 1.5;
+    return feeData * feeMultiplier;
 }
 
 async function getNonce(address) {

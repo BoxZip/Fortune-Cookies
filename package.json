@@ -14,6 +14,7 @@
     "deploy-production": "npx hardhat run --network polygon_mainnet scripts/deploy_hardhat.js",
     "verify-production": "npx hardhat run --network polygon_mainnet scripts/verify.js",
     "upload-production": "npx hardhat run --network polygon_mainnet scripts/uploadMessages.js",
+    "setup-production": "npx hardhat run --network polygon_mainnet scripts/setupContract.js",
     "pause-production": "npx hardhat run --network polygon_mainnet scripts/togglePause.js"
   },
   "author": "",
