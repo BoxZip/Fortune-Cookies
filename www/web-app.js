@@ -184,7 +184,7 @@ async function getNonce(address) {
 async function mintStandard(){
     if(CONTRACT.mintPaused) return alert('Minting is currently paused.');
     if(!await ethEnabled() && ACCOUNT) return alert('You must be connected with MetaMask to proceed.')
-    if(await ethersProvider.getNetwork().chainId !== chainId) return alert("Please switch to your MetaMask to use the Polygon Network and try again.")
+    if((await ethersProvider.getNetwork()).chainId !== chainId) return alert("Please switch to your MetaMask to use the Polygon Network and try again.")
 
     let quantity = parseInt(document.getElementById('standard_quantity').value);
     if(quantity<1) return alert('Quantity must be atleast 1');
@@ -209,7 +209,7 @@ async function mintStandard(){
 async function mintCustom(){
     if(CONTRACT.mintPaused) return alert('Minting is currently paused.');
     if(!await ethEnabled() && ACCOUNT) return alert('You must be connected with MetaMask to proceed.')
-    if(await ethersProvider.getNetwork().chainId !== chainId) return alert("Please switch to your MetaMask to use the Polygon Network and try again.")
+    if((await ethersProvider.getNetwork()).chainId !== chainId) return alert("Please switch to your MetaMask to use the Polygon Network and try again.")
 
     let quantity = parseInt(document.getElementById('custom_quantity').value);
     if(quantity<1) return alert('Quantity must be atleast 1');
@@ -323,7 +323,7 @@ const ethEnabled = async () => {
         ethersProvider = new ethers.providers.Web3Provider(window.ethereum);
         ethersSigner = ethersProvider.getSigner();
 
-        if(await ethersProvider.getNetwork().chainId == chainId) FortuneCookieWrite = new ethers.Contract(FortuneCookie_address, FortuneCookie_ABI, ethersSigner);
+        if((await ethersProvider.getNetwork()).chainId == chainId) FortuneCookieWrite = new ethers.Contract(FortuneCookie_address, FortuneCookie_ABI, ethersSigner);
 
         return true;  
     }  
