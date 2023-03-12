@@ -267,7 +267,7 @@ async function chainSwitchInstall(chainId){
                 params: [
                 {
                     chainName: blockchains[chainId].chainName,
-                    chainId: blockchains[chainId].chainId,
+                    chainId: '0x'+(chainId).toString(16),
                     nativeCurrency: blockchains[chainId].nativeCurrency,
                     rpcUrls: blockchains[chainId].rpcUrls
                 }
