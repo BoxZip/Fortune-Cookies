@@ -87,7 +87,7 @@ async function init(){
 
     let cookie_array = document.getElementById('cookie_array');
 
-    var openCookie = function(e){ console.log(e.target); if(e.target.tagName.toUpperCase() == 'IMG'){ if(e.target.src.split('/').slice(-1)[0] == 'cookie.svg') playCrunchNoise(); e.target.src = '/assets/cookie-opened.svg'; } };
+    var openCookie = function(e){ if(e.target.tagName.toUpperCase() == 'IMG'){ if(e.target.src.split('/').slice(-1)[0] == 'cookie.svg') playCrunchNoise(); e.target.src = '/assets/cookie-opened.svg'; } };
 
     if(window.outerWidth > 749) {
         cookie_array_HTML = buildCookieArray('<img src="/assets/cookie.svg" width="256px" height="256px" />', 32, 32, 2000, 2000, -1);
@@ -158,10 +158,12 @@ async function updatePageValues(){
     });
 
     let priceCustom = await FortuneCookieRead.priceCustom();
+    CONTRACT.priceCustom = priceCustom;
     [].slice.call(document.querySelectorAll('.customprice')).forEach(async function(el){
         el.innerText = weiToEther(priceCustom) + ' MATIC';
     });
     let priceStandard = await FortuneCookieRead.priceStandard();
+    CONTRACT.priceStandard = priceStandard;
     [].slice.call(document.querySelectorAll('.standardprice')).forEach(async function(el){
         el.innerText = weiToEther(priceStandard) + ' MATIC';
     });
@@ -169,13 +171,31 @@ async function updatePageValues(){
     updateDynamicValues();
 }
 
+async function getGasPrice() {
+    let feeData = (await ethersProvider.getGasPrice()).toNumber()
+    return feeData
+}
+
+async function getNonce(address) {
+    let nonce = await ethersProvider.getTransactionCount(address)
+    return nonce
+}
+
 async function mintStandard(){
     if(CONTRACT.mintPaused) return alert('Minting is currently paused.');
+    if(!await ethEnabled() && ACCOUNT) return alert('You must be connected with MetaMask to proceed.')
     let quantity = parseInt(document.getElementById('standard_quantity').value);
     if(quantity<1) return alert('Quantity must be atleast 1');
     if(quantity>CONTRACT.maxQuantity) return alert('Quantity must be '+CONTRACT.maxQuantity+' or less');
     try{
-        let receipt = await FortuneCookieWrite.mint(quantity);
+        let gasFee = await getGasPrice();
+        let nonce = await getNonce(ACCOUNT);
+        let config = {
+            value: (CONTRACT.priceStandard * quantity)+"",
+            gasPrice: gasFee, 
+            nonce: nonce
+        }
+        let receipt = await FortuneCookieWrite.mint(quantity, config);
         console.log(receipt);
         alert('Transaction successful!');
     }catch(err){
@@ -185,6 +205,7 @@ async function mintStandard(){
 
 async function mintCustom(){
     if(CONTRACT.mintPaused) return alert('Minting is currently paused.');
+    if(!await ethEnabled()) return alert('You must be connected with MetaMask to proceed.')
 
     let quantity = parseInt(document.getElementById('custom_quantity').value);
     if(quantity<1) return alert('Quantity must be atleast 1');
@@ -194,7 +215,14 @@ async function mintCustom(){
     if(message.length > CONTRACT.maxMessageLength) return alert('Message length must not exceed '+CONTRACT.maxMessageLength+' characters')
     if(message.split(/[ ]+/).join('').length == 0) return alert('The message is blank')
     try{
-        let receipt = await FortuneCookieWrite.mintCustom(quantity, message);
+        let gasFee = await getGasPrice();
+        let nonce = await getNonce(ACCOUNT);
+        let config = {
+            value: (CONTRACT.priceStandard * quantity)+"",
+            gasPrice: gasFee, 
+            nonce: nonce
+        }
+        let receipt = await FortuneCookieWrite.mintCustom(quantity, message, config);
         console.log(receipt);
         alert('Transaction pending.\nPlease wait for your transaction to be verified on the blockchain...');
     }catch(err){
