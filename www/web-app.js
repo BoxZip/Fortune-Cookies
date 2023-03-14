@@ -53,6 +53,7 @@ function playCrunchNoise(){
 }
 
 async function init(){
+    setVH();
     blockchains[137] = {
         chainName: 'Polygon Mainnet',
         chainId: 137,
@@ -359,3 +360,9 @@ async function chainSwitchInstall(chainId){
 }
 
 window.addEventListener('load', init);
+let setVH = () => {
+    let vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+};
+setVH();
+window.addEventListener('resize', setVH);
