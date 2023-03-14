@@ -12,10 +12,13 @@
     <ellipse style="fill: rgb(216, 216, 216); stroke: rgb(0, 0, 0);" cx="119.125" cy="1049.529" rx="1094.996" ry="1043.113"></ellipse>
   </clipPath>
 </defs>
+<filter id="soften">
+  <feGaussianBlur in="SourceGraphic" stdDeviation="7"></feGaussianBlur>
+</filter>
 <filter id="shadowblur">
   <feGaussianBlur in="SourceGraphic" stdDeviation="30"></feGaussianBlur>
 </filter>
-<g transform-origin="50% 50%" transform="scale(0.5,0.5)">
+<g transform-origin="50% 50%" transform="scale(0.5,0.5)" filter="url(#soften)">
   <rect filter="url(#shadowblur)" width="2675.881" height="206.75" transform-origin="50% 50%" rx="800" fill="rgba(0,0,0,0.25)" style="" y="2000" x="-152.917"></rect>
   <text x="910.849" y="2079.205" font-size="2048px" dominant-baseline="middle" text-anchor="middle" style="user-select: none; white-space: pre; clip-path: url(#clip-2); font-size: 2048px;" draggable="false">🥠</text>
   <text x="1746.601" y="1676.078" font-size="2048px" dominant-baseline="middle" text-anchor="middle" style="user-select: none; white-space: pre; font-size: 2048px; clip-path: url(#clip-1);" draggable="false">🥠</text>
