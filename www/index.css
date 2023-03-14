@@ -4,7 +4,7 @@ html{
 }
 body{
     display: grid;
-    grid-template-columns: [main-start] 1fr [content-start] 2fr [content-end] 1fr [main-end];
+    grid-template-columns: [main-start] 1fr [content-start] 3fr [content-end] 1fr [main-end];
     grid-template-rows: [main-start] 100% [main-end];
     margin: 0;
     font-family: 'Inconsolata', monospace!important;
@@ -215,13 +215,12 @@ h3 b, h3 u{
 }
 @media screen and (max-width: 749px){
     body{
-        font-size: calc((1vw + 1vh));
+        font-size: initial;
         overflow-x:hidden;
-        position:fixed;
+        position:absolute;
         width: 100vw;
         height: 100vh;
-        height: -webkit-fill-available;
-        transform: scale(0.96,0.96) translate(0, 0);
+        transform: none;
         transform-origin: 50% 50%;
     }
     .page {
@@ -234,13 +233,10 @@ h3 b, h3 u{
         background-color: rgba(0,0,0,0.69);
     }
     #main_page img{
-        position: relative;
-        top:7vh;
-        right: 0;
-        width: min(50vh, 50vw);
+        width: min(70vh, 70vw);
     }
     #main_page h1{
-        margin-top: 2em;
+        font-size: 2.5em;
     }
     #mint{
         background-color: white;
