@@ -71,9 +71,10 @@ h3{
 #main_page img{
     display: inline-block;
     position: relative;
-    top:7vh;
+    top:0;
     right: 0;
-    width: min(50vh, 50vw);
+    height: 20em;
+    margin: -2.5em 0 -5em 0;
 }
 h1{
     color: white;
