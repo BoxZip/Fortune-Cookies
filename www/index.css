@@ -40,7 +40,7 @@ h2{
     font-size: 1em;
     font-weight: 800;
 }
-#customMSG, h3{
+#customMSG, h3, .warning{
     font-size: 1em;
     font-weight: 400;
     background-color: white;
@@ -56,11 +56,20 @@ h3{
     grid-row-end: main-end;
     grid-column-start: content-start;
     grid-column-end: content-end;
-    height: 100vh;
-    height: calc(var(--vh, 1vh) * 100);
+    margin-bottom: 10vh;
+    height: 90vh;
+    height: calc(var(--vh, 1vh) * 90);
     overflow-y: auto;
     z-index: 10000;
     padding: 0;
+}
+.connected .page, .connected .modal{
+    margin-bottom: 25vh;
+    height: 75vh;
+    height: calc(var(--vh, 1vh) * 75);
+}
+.connected #connectwallet{
+    display: none;
 }
 #mint{
     background-color: white;
@@ -131,6 +140,122 @@ button{
     margin: 0 auto;
     font-size: inherit;
 }
+#wallet{
+    position: absolute;
+    z-index: 100000;
+    width: 100vw;
+    min-width: 0;
+    bottom:0;
+    left: 0;
+    height: 10vh;
+    background-color: white;
+    text-align: center;
+    color: black;
+    border-top: 4px solid #797979;
+    overflow-x: auto;
+    overflow-y: visible;
+    white-space: nowrap;
+    display: inline-flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+#wallet .container{
+    margin-left: 5em;
+    white-space: nowrap;
+    overflow: visible;
+    min-width: 0;
+    min-height: 0;
+}
+#wallet .container > :last-child {
+    margin-right: 5em;
+}
+#wallet .token{
+    display: inline-block;
+    box-sizing:border-box;
+    overflow: visible;
+    min-width: 20vh;
+    z-index: 12000;
+}
+#wallet .token b{
+    display: block;
+    color: black;
+}
+#wallet .token img{
+    height: 7vh;
+}
+#wallet .token .menu{
+    text-align: center;
+}
+.menu .send {
+    background-color: hsl(220, 100%, 60%);
+    color: white;
+}
+.menu .burn {
+    background-color: hsl(0, 100%, 60%);
+    color: white;
+}
+.connected #wallet{
+    height: 25vh;
+    display: inline-flex;
+}
+.modal{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 90vh;
+    height: calc(var(--vh, 1vh) * 90);
+    z-index: 11000;
+    background-color: rgba(255,255,255,0.97);
+    color: black;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+#sendmodal {
+    background-color: rgba(255,255,255,1);
+    color: black;
+}
+#burnmodal {
+    background-color: hsla(0,100%,40%,1);
+    color: black;
+}
+#burnmodal h1{
+    color: white;
+    text-transform: uppercase;
+}
+.modal.show{
+    display: inline-flex;
+}
+.modal .container {
+    width: 90%;
+}
+.modal *{
+    min-height: 0;
+}
+#sendmodal input{
+    display: inline-block;
+    text-align: center;
+}
+#sendTo, #sendFrom{
+    display: block;
+    width: 100%;
+    margin: 1em 0;
+}
+#send, #burn{
+    margin-left: 1em;
+}
+#burncancel, #burnTokenID {
+    background-color: transparent;
+    color: white;
+}
+#sendcookie, #burncookie, #viewcookie {
+    width: 10em;
+}
 #connect{
     background-color: white;
     position: absolute;
@@ -161,7 +286,6 @@ button{
     line-height: 1.5;
 }
 .bold, b {
-    color: white;
     font-weight: 800;
 }
 #main_page b, #main_page u, #main_page i{
@@ -226,6 +350,9 @@ button{
 }
 h3 b, h3 u{
     color: black!important;
+}
+.menu button{
+    font-size: 0.5em!important;
 }
 @media screen and (max-width: 749px){
     body{

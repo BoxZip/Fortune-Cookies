@@ -9,6 +9,7 @@ let BGSTYLE;
 let cookie_array_HTML;
 let CONTRACT = {};
 let $;
+let WALLET = {};
 
 import { Network, Alchemy, AlchemySubscription } from 'alchemy-sdk';
 import {ethers} from 'ethers';
@@ -75,15 +76,17 @@ async function init(){
 
     $ = new Alchemy(config);
 
-    let connectWallet = generateButton('Mint Now!', async function(e){
-        toggleMintPage();
-        await ethEnabled();
-    });
-    connectWallet.className = connectWallet.id = 'connect';
-    document.body.appendChild(connectWallet);
+    document.getElementById('connectwallet').addEventListener('click', ethEnabled);
 
     document.getElementById('standard_mint').addEventListener('click', mintStandard);
     document.getElementById('custom_mint').addEventListener('click', mintCustom);
+
+    
+    document.getElementById('sendcancel').addEventListener('click', modalCloser('sendmodal'));
+    document.getElementById('burncancel').addEventListener('click', modalCloser('burnmodal'));
+    //document.getElementById('viewcancel').addEventListener('click', modalCloser('viewmodal'));
+    document.getElementById('send').addEventListener('click', transferToken);
+    document.getElementById('burn').addEventListener('click', burnToken);
     
 
     let cookie_array = document.getElementById('cookie_array');
@@ -175,17 +178,18 @@ async function updatePageValues(){
 async function getGasPrice() {
     let feeData = (await ethersProvider.getGasPrice()).toNumber();
     let feeMultiplier = 1.5;
-    return feeData * feeMultiplier;
+    return Math.floor(feeData * feeMultiplier).toString();
 }
 
 async function getNonce(address) {
     let nonce = await ethersProvider.getTransactionCount(address)
-    return nonce
+    return nonce.toString();
 }
 
 async function mintStandard(){
     if(CONTRACT.mintPaused) return alert('Minting is currently paused.');
-    if(!await ethEnabled() && ACCOUNT) return alert('You must be connected with MetaMask to proceed.')
+    if(!ACCOUNT) await ethEnabled();
+    if(!ACCOUNT) return alert('You must be connected with MetaMask to proceed.')
     if((await ethersProvider.getNetwork()).chainId !== chainId) return alert("Please switch to your MetaMask to use the Polygon Network and try again.")
 
     let quantity = parseInt(document.getElementById('standard_quantity').value);
@@ -204,14 +208,15 @@ async function mintStandard(){
         console.log(receipt);
         alert('Transaction successful!');
     }catch(err){
-        alert('There was an error while your transaction was being processed:\n\n'+err.data.message);
+        alert('There was an error while your transaction was being processed:\n\n'+(err.data||err).message);
         console.log(err);
     }
 }
 
 async function mintCustom(){
     if(CONTRACT.mintPaused) return alert('Minting is currently paused.');
-    if(!await ethEnabled() && ACCOUNT) return alert('You must be connected with MetaMask to proceed.')
+    if(!ACCOUNT) await ethEnabled();
+    if(!ACCOUNT) return alert('You must be connected with MetaMask to proceed.')
     if((await ethersProvider.getNetwork()).chainId !== chainId) return alert("Please switch to your MetaMask to use the Polygon Network and try again.")
 
     let quantity = parseInt(document.getElementById('custom_quantity').value);
@@ -234,7 +239,7 @@ async function mintCustom(){
         console.log(receipt);
         alert('Transaction pending.\nPlease wait for your transaction to be verified on the blockchain...');
     }catch(err){
-        alert('There was an error while your transaction was being processed:\n\n'+err.data.message);
+        alert('There was an error while your transaction was being processed:\n\n'+(err.data||err).message);
         console.log(err);
     }
 }
@@ -285,12 +290,13 @@ function animateBG(){
     if(!BGSTYLE) BGSTYLE = document.body.appendChild(document.createElement('style'));
     BGSTYLE.id = 'BGSTYLE';
     let values = Math.abs(BG%360)+", "+100+"%, "+50+"%";
-    BGSTYLE.innerText = ".BG, body, #mint button, .showMint #connect { transition: background-color 2.97s; background-color: hsla("+values+",0.5); }  h1 { transition: color 2.97s; color: hsl("+values+"); } #contract b, #main_page b, #main_page u, #main_page i{ transition: background-color 2.97s, color 2.97s; background-color: hsla("+values+", 0.15); color: hsla("+values+", 1); }";
+    BGSTYLE.innerText = ".BG, body, #mint button, .showMint #connect, #send { transition: background-color 2.97s; background-color: hsla("+values+",0.5); }  h1 { transition: color 2.97s; color: hsl("+values+"); } #contract b, #main_page b, #main_page u, #main_page i{ transition: background-color 2.97s, color 2.97s; background-color: hsla("+values+", 0.15); color: hsla("+values+", 1); } #wallet { transition: border-color 2.97s; border-color: hsla("+values+", 1); }";
     requestAnimationFrame(function(){ setTimeout(animateBG, 3000) });
 }
 
 let listeners = [];
-function onConnect(){
+async function onConnect(){
+    document.body.classList.add('connected');
     if(listeners.indexOf(ACCOUNT.toLowerCase()) == -1){
         $.ws.on({
             method: 'alchemy_minedTransactions',
@@ -298,15 +304,192 @@ function onConnect(){
         }, handleTransactionResponse );
         
         listeners.push(ACCOUNT.toLowerCase());
-    } 
+    }
+    loadWallet();
+}
+
+async function loadWallet(){
+    let balance = await FortuneCookieRead.balanceOf(ACCOUNT);
+    WALLET = {};
+    showWalletNFTs();
+    if(balance > 0){
+        let tokenID, NFT;
+        for(let i=0; i<balance; i++){
+            loadOwnerNFT(ACCOUNT, i);
+        }
+    }
+}
+
+async function loadOwnerNFT(owner, i){
+    var tokenID = await FortuneCookieRead.tokenOfOwnerByIndex(owner, i);
+    var NFT = {};
+    NFT.token = await FortuneCookieRead.tokens(tokenID);
+    NFT.minted = NFT.token[1];
+    NFT.owner = owner;
+    NFT.tokenID = tokenID;
+    NFT.createdAt = NFT.token[2];
+    NFT.createdBy = NFT.token[3];
+    NFT.open = NFT.token[4];
+    NFT.openedAt = NFT.token[5];
+    NFT.openedBy = NFT.token[6];
+    NFT.element = buildNFT(NFT);
+    WALLET[tokenID] = NFT;
+    showWalletNFTs();
+    return NFT;
+}
+
+function showWalletNFTs(){
+    let wallet = document.querySelector('#wallet .container');
+    let connectwallet = document.getElementById('connectwallet');
+    wallet.innerHTML = ""
+    wallet.appendChild(connectwallet);
+    Object.keys(WALLET).map(v=>parseInt(v)).sort((a,b)=>a-b).forEach(NFT => { wallet.appendChild(WALLET[NFT].element); })
+}
+
+function buildNFT(NFT){
+    let element = document.createElement('div');
+    element.className = 'token';
+    let img = document.createElement('img');
+    img.src = NFT.open ? '/assets/cookie-opened.svg' : '/assets/cookie.svg';
+    element.appendChild(img);
+    let tokenID = document.createElement('b');
+    tokenID.textContent = '#'+NFT.tokenID;
+    element.appendChild(tokenID);
+    
+    let menu = document.createElement('div');
+    menu.className = 'menu';
+    let sendBtn = generateButton('Send', function(e){
+        openSendModal(NFT);
+    });
+    sendBtn.classList.add('send');
+    menu.appendChild(sendBtn);
+    let viewBtn = generateButton('View', function(e){
+        openViewModal(NFT);
+    });
+    menu.appendChild(viewBtn);
+    let burnBtn = generateButton('Burn', function(e){
+        openBurnModal(NFT);
+    });
+    burnBtn.classList.add('burn');
+    menu.appendChild(burnBtn);
+    
+    element.appendChild(menu);
+
+    return element;
+}
+
+function openSendModal(NFT){
+    let sendTokenID = document.getElementById('sendTokenID');
+    sendTokenID.value = NFT.tokenID;
+    document.getElementById('sendFrom').value = NFT.owner;
+    document.getElementById('sendcookie').src = NFT.open ? '/assets/cookie-opened.svg' : '/assets/cookie.svg';
+    modalOpener('sendmodal')();
+}
+
+function openViewModal(NFT){
+    window.location = '/NFT?'+NFT.tokenID;
+    /*/
+    document.getElementById('viewTokenID').textContent = NFT.tokenID;
+    document.getElementById('viewcookie').src = NFT.open ? '/assets/cookie-opened.svg' : '/assets/cookie.svg';
+    modalOpener('viewmodal')();
+    /*/
+}
+
+function modalCloser(modalId){
+    return function(){
+        document.getElementById(modalId).classList.remove('show');
+    }
+}
+
+function closeAllModals(){
+    document.getElementById('burnmodal').classList.remove('show');
+    document.getElementById('sendmodal').classList.remove('show');
+    document.getElementById('viewmodal').classList.remove('show');
+}
+
+function modalOpener(modalId){
+    return function(){
+        closeAllModals();
+        document.getElementById(modalId).classList.add('show');
+    }
+}
+
+function openBurnModal(NFT){
+    let burnTokenID = document.getElementById('burnTokenID');
+    burnTokenID.value = NFT.tokenID;
+    document.getElementById('burncookie').src = NFT.open ? '/assets/cookie-opened.svg' : '/assets/cookie.svg';
+    modalOpener('burnmodal')();
+}
+
+async function transferToken(){
+    let tokenID = parseInt(document.getElementById('sendTokenID').value);
+    let sendTo = document.getElementById('sendTo').value;
+    let sendFrom = document.getElementById('sendFrom').value;
+    let NFT = WALLET[tokenID];
+    if(!NFT) return alert('UNKNOWN TOKEN ID');
+    if(!sameAddress(sendFrom, ACCOUNT)) return alert('Please connect to '+sendFrom+' on MetaMask first.');
+    if(FortuneCookieWrite === null) await switchToPolygon();
+    if(FortuneCookieWrite === null) return alert('You must connect to Polygon Mainnet on MetaMask to send this NFT.')
+    if(confirm('Are you sure you would like to send token #'+tokenID+' from '+sendFrom+' to '+sendTo+' ?')){
+        try{
+            let gasFee = await getGasPrice();
+            let nonce = await getNonce(ACCOUNT);
+            let config = {
+                gasPrice: gasFee, 
+                nonce: nonce
+            }
+            let receipt = await FortuneCookieWrite.transferFrom(sendFrom, sendTo, tokenID.toString(), config);
+            console.log(receipt);
+        }catch(err){
+            alert('There was an error while your transaction was being processed:\n\n'+(err.data||err).message);
+            console.log(err);
+        }
+    }
+}
+
+function sameAddress(a,b){
+    return a.toString().toLowerCase() == b.toString().toLowerCase();
+}
+
+async function burnToken(){
+    let tokenID = parseInt(document.getElementById('burnTokenID').value);
+    let NFT = WALLET[tokenID];
+    if(!NFT) return alert('UNKNOWN TOKEN ID');
+    if(!sameAddress(NFT.owner, ACCOUNT)) return alert('Please connect to '+NFT.owner+' on MetaMask first.');
+    if(FortuneCookieWrite === null) await switchToPolygon();
+    if(FortuneCookieWrite === null) return alert('You must connect to Polygon Mainnet on MetaMask to burn this NFT.')
+    if(confirm('Are you sure you would like to PERMANENTLY DESTROY Fortune Cookie #'+tokenID+' ?')){
+        try{
+            let gasFee = await getGasPrice();
+            let nonce = await getNonce(ACCOUNT);
+            let config = {
+                gasPrice: gasFee, 
+                nonce: nonce
+            }
+            let receipt = await FortuneCookieWrite.burn(tokenID.toString(), config);
+            console.log(receipt);
+        }catch(err){
+            alert('There was an error while your transaction was being processed:\n\n'+(err.data||err).message);
+            console.log(err);
+        }
+    }
 }
 
 function handleTransactionResponse(txn){
+    loadWallet();
     if(txn.removed){
         alert('Transaction reverted. \nCheck etherscan for more information.');
     }else{
         alert('Transaction confirmed!')
     }
+    closeAllModals();
+}
+
+async function updateProvider(){
+    ethersProvider = new ethers.providers.Web3Provider(window.ethereum);
+    ethersSigner = ethersProvider.getSigner();
+    if((await ethersProvider.getNetwork()).chainId == chainId) FortuneCookieWrite = new ethers.Contract(FortuneCookie_address, FortuneCookie_ABI, ethersSigner);
+    else FortuneCookieWrite = null;
 }
 
 const ethEnabled = async () => {
@@ -316,21 +499,23 @@ const ethEnabled = async () => {
         let accounts = await window.ethereum.request({method: 'eth_requestAccounts'});
         ACCOUNT = accounts[0]
         
-        window.ethereum.on('accountsChanged', function (accounts) {
+        window.ethereum.on('accountsChanged', async function (accounts) {
             ACCOUNT = accounts[0];
+            await updateProvider();
             onConnect();
         });
 
+        await updateProvider();
+
         if(ACCOUNT) onConnect();
-
-        ethersProvider = new ethers.providers.Web3Provider(window.ethereum);
-        ethersSigner = ethersProvider.getSigner();
-
-        if((await ethersProvider.getNetwork()).chainId == chainId) FortuneCookieWrite = new ethers.Contract(FortuneCookie_address, FortuneCookie_ABI, ethersSigner);
-
         return true;  
     }  
     return false;
+}
+
+async function switchToPolygon(){
+    await chainSwitchInstall(chainId);
+    await updateProvider();
 }
 
 async function chainSwitchInstall(chainId){

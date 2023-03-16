@@ -27,6 +27,7 @@
 </head>
 <body>
     <div id="cookie_array" class="array"></div>
+    <div id="wallet"><div class="container"><button id="connectwallet">Connect Wallet</button></div></div>
     <div id="page_container" class="page">
         <div id="main_page">
             <img src="/assets/cookie.svg"/><h1>Fortune Cookie</h1>
@@ -81,6 +82,32 @@
             <img src="/assets/cookie-opened.svg"/>
             <h3>A total of <b class="openedcount">0</b> have been opened.</h3>
         </div>
+        </div>
+        <div id="sendmodal" class="modal">
+            <div class="container">
+                <h1>Send Fortune Cookie</h1>
+                <img id="sendcookie" src="/assets/cookie.svg"/>
+                <p><b>Token ID: </b><input type="text" id="sendTokenID" disabled value="0"/></p>
+                <p><b>send from this address: </b><input type="text" id="sendFrom" disabled placeholder="0x..."></p>
+                <p><b>to this address:</b><input type="text" id="sendTo" placeholder="0x..."></p>
+                <p><button id="sendcancel">◁ Cancel</button><button id="send">Send ▶</button></p>
+            </div>
+        </div>
+        <div id="viewmodal" class="modal">
+            <div class="container">
+                <img id="viewcookie" src="/assets/cookie.svg"/>
+                <h1>Fortune Cookie #<span id="viewTokenID">0</span></h1>
+            </div>
+        </div>
+        <div id="burnmodal" class="modal">
+            <div class="container">
+                <h1>BURN Fortune Cookie</h1>
+                <img id="burncookie" src="/assets/cookie.svg"/>
+                <p><b>Token ID: </b><input type="text" id="burnTokenID" disabled value="0"/></p>
+                <p class="warning"><b>WARNING:</b> BURNING AN NFT RESULTS IN THE TOKEN BEING DESTROYED!</p>
+                <p>Only complete this action if you wish for your NFT to be permanently destroyed.<br>There is no way to undo this action!</p>
+                <p><button id="burncancel">◁ Cancel</button><button id="burn">Burn ▶</button></p>
+            </div>
         </div>
     </div>
 </body>

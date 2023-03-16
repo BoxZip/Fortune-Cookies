@@ -161,7 +161,6 @@ async function updateUntilOpened(){
         NFT.openAt = (new Date()).getTime();
         await update();
         crunch.play();
-        alert('The cookie has been cracked!\nOnce the transaction clears you can read the note inside.')
     }else{
         requestAnimationFrame(function(){ setTimeout(updateUntilOpened, 1000) })
     }
@@ -183,7 +182,6 @@ function connectedUpdate(){
 }
 
 async function connect(){
-    if(!confirm("Only the owner of this NFT can interact with this NFT.\nDo you wish to continue?")) return;
     if(await ethEnabled()){
         if(ACCOUNT){
             NFT.connected = true;
@@ -238,18 +236,20 @@ const ethEnabled = async () => {
     if (window.ethereum) {
 
         await chainSwitchInstall(chainId);
-        
-        NFT.ethersProvider = new ethers.providers.Web3Provider(window.ethereum);
-        NFT.signer = NFT.ethersProvider.getSigner();
 
         let accounts = await window.ethereum.request({method: 'eth_requestAccounts'});
         ACCOUNT = accounts[0];
 
+        NFT.ethersProvider = new ethers.providers.Web3Provider(window.ethereum);
+        NFT.signer = NFT.ethersProvider.getSigner();
+        FortuneCookieWrite = new ethers.Contract(FortuneCookie_address, FortuneCookie_ABI, NFT.signer);
+
         window.ethereum.on('accountsChanged', function (accounts) {
             ACCOUNT = accounts[0];
+            NFT.ethersProvider = new ethers.providers.Web3Provider(window.ethereum);
+            NFT.signer = NFT.ethersProvider.getSigner();
+            FortuneCookieWrite = new ethers.Contract(FortuneCookie_address, FortuneCookie_ABI, NFT.signer);
         });
-
-        FortuneCookieWrite = new ethers.Contract(FortuneCookie_address, FortuneCookie_ABI, NFT.signer);
 
         return true;  
     }  
