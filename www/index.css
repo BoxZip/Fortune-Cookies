@@ -196,8 +196,16 @@ button{
     background-color: #797979;
     padding: 1em;
 }
+#contract p{
+    padding: 0 0 1em 0;
+}
 #contract img{
-    height: 10em;
+    max-height: 10em;
+    max-width: 20em;
+}
+#contract .promo img{
+    max-height: 10em;
+    max-width: 10em;
 }
 #info{
     background-color: white;
