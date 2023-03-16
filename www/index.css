@@ -458,7 +458,6 @@ h3 b, h3 u{
 }
 .hide{
     opacity: 0;
-    visibility: collapse;
 }
 .BG, body, #mint button, .showMint #connect, #main_page, #mint *{
     transition: background-color 2.97s, color 2.97s, opacity 0.5s;

@@ -12,7 +12,7 @@ let $;
 let WALLET = {};
 
 import { Network, Alchemy, AlchemySubscription } from 'alchemy-sdk';
-import {ethers} from 'ethers';
+import { ethers} from 'ethers';
 import {Howl, Howler} from 'howler';
 import { chainId, AlchemySettings, FortuneCookie_address, FortuneCookie_ABI } from './env.js';
 /*/
@@ -25,6 +25,7 @@ window.crunch = crunch;
 
 window.ethers = ethers;
 window.Alchemy = Alchemy;
+const BigNumber = window.BigNumber = ethers.BigNumber;
 
 const blockchains = {};
 
@@ -176,9 +177,8 @@ async function updatePageValues(){
 }
 
 async function getGasPrice() {
-    let feeData = (await ethersProvider.getGasPrice()).toNumber();
-    let feeMultiplier = 1.5;
-    return Math.floor(feeData * feeMultiplier).toString();
+    let feeData = await ethersProvider.getGasPrice();
+    return feeData;
 }
 
 async function getNonce(address) {
@@ -197,16 +197,13 @@ async function mintStandard(){
     if(quantity>CONTRACT.maxQuantity) return alert('Quantity must be '+CONTRACT.maxQuantity+' or less');
 
     try{
-        let gasFee = await getGasPrice();
         let nonce = await getNonce(ACCOUNT);
         let config = {
-            value: (CONTRACT.priceStandard * quantity)+"",
-            gasPrice: gasFee, 
+            value: CONTRACT.priceStandard.mul(quantity),
             nonce: nonce
-        }
+        };
         let receipt = await FortuneCookieWrite.mint(quantity, config);
         console.log(receipt);
-        alert('Transaction successful!');
     }catch(err){
         alert('There was an error while your transaction was being processed:\n\n'+(err.data||err).message);
         console.log(err);
@@ -228,16 +225,13 @@ async function mintCustom(){
     if(message.split(/[ ]+/).join('').length == 0) return alert('The message is blank')
     
     try{
-        let gasFee = await getGasPrice();
         let nonce = await getNonce(ACCOUNT);
         let config = {
-            value: (CONTRACT.priceStandard * quantity)+"",
-            gasPrice: gasFee, 
+            value: CONTRACT.priceCustom.mul(quantity),
             nonce: nonce
         }
         let receipt = await FortuneCookieWrite.mintCustom(quantity, message, config);
         console.log(receipt);
-        alert('Transaction pending.\nPlease wait for your transaction to be verified on the blockchain...');
     }catch(err){
         alert('There was an error while your transaction was being processed:\n\n'+(err.data||err).message);
         console.log(err);
@@ -295,6 +289,9 @@ function animateBG(){
 }
 
 let listeners = [];
+async function onDisconnect(){
+    document.body.classList.add('connected');
+}
 async function onConnect(){
     document.body.classList.add('connected');
     if(listeners.indexOf(ACCOUNT.toLowerCase()) == -1){
@@ -305,17 +302,17 @@ async function onConnect(){
         
         listeners.push(ACCOUNT.toLowerCase());
     }
-    loadWallet();
+    loadWallet(ACCOUNT);
 }
 
-async function loadWallet(){
-    let balance = await FortuneCookieRead.balanceOf(ACCOUNT);
+async function loadWallet(account){
     WALLET = {};
     showWalletNFTs();
+    let balance = await FortuneCookieRead.balanceOf(account);
     if(balance > 0){
         let tokenID, NFT;
         for(let i=0; i<balance; i++){
-            loadOwnerNFT(ACCOUNT, i);
+            loadOwnerNFT(account, i);
         }
     }
 }
@@ -343,7 +340,21 @@ function showWalletNFTs(){
     let connectwallet = document.getElementById('connectwallet');
     wallet.innerHTML = ""
     wallet.appendChild(connectwallet);
-    Object.keys(WALLET).map(v=>parseInt(v)).sort((a,b)=>a-b).forEach(NFT => { wallet.appendChild(WALLET[NFT].element); })
+    if(Object.keys(WALLET).length == 0) wallet.appendChild((el=>{
+        el.classList.add('hide');
+        el.style.transition = "opacity 3s";
+        let h2 = document.createElement('h2');
+        h2.textContent = "This wallet does contain any Fortune Cookie tokens yet.";
+        el.appendChild(h2);
+        let p = document.createElement('p');
+        p.innerHTML = "If you expected to see some here, check if you are connected with the correct wallet.<br>If you are new here, have you considered minting some brand new Fortune Cookies?";
+        el.appendChild(p);
+        setTimeout(function(){
+            el.classList.remove('hide');
+        }, 500);
+        return el;
+    })(document.createElement('div')))
+    else Object.keys(WALLET).map(v=>parseInt(v)).sort((a,b)=>a-b).forEach(NFT => { wallet.appendChild(WALLET[NFT].element); })
 }
 
 function buildNFT(NFT){
@@ -432,10 +443,8 @@ async function transferToken(){
     if(FortuneCookieWrite === null) return alert('You must connect to Polygon Mainnet on MetaMask to send this NFT.')
     if(confirm('Are you sure you would like to send token #'+tokenID+' from '+sendFrom+' to '+sendTo+' ?')){
         try{
-            let gasFee = await getGasPrice();
             let nonce = await getNonce(ACCOUNT);
             let config = {
-                gasPrice: gasFee, 
                 nonce: nonce
             }
             let receipt = await FortuneCookieWrite.transferFrom(sendFrom, sendTo, tokenID.toString(), config);
@@ -460,10 +469,8 @@ async function burnToken(){
     if(FortuneCookieWrite === null) return alert('You must connect to Polygon Mainnet on MetaMask to burn this NFT.')
     if(confirm('Are you sure you would like to PERMANENTLY DESTROY Fortune Cookie #'+tokenID+' ?')){
         try{
-            let gasFee = await getGasPrice();
             let nonce = await getNonce(ACCOUNT);
             let config = {
-                gasPrice: gasFee, 
                 nonce: nonce
             }
             let receipt = await FortuneCookieWrite.burn(tokenID.toString(), config);
@@ -476,13 +483,13 @@ async function burnToken(){
 }
 
 function handleTransactionResponse(txn){
-    loadWallet();
     if(txn.removed){
         alert('Transaction reverted. \nCheck etherscan for more information.');
     }else{
         alert('Transaction confirmed!')
     }
     closeAllModals();
+    loadWallet(ACCOUNT);
 }
 
 async function updateProvider(){
@@ -491,7 +498,7 @@ async function updateProvider(){
     if((await ethersProvider.getNetwork()).chainId == chainId) FortuneCookieWrite = new ethers.Contract(FortuneCookie_address, FortuneCookie_ABI, ethersSigner);
     else FortuneCookieWrite = null;
 }
-
+let _accountsChanged = false, _chainChanged = false;
 const ethEnabled = async () => {
     if (window.ethereum) {
         await chainSwitchInstall(chainId);
@@ -499,11 +506,15 @@ const ethEnabled = async () => {
         let accounts = await window.ethereum.request({method: 'eth_requestAccounts'});
         ACCOUNT = accounts[0]
         
-        window.ethereum.on('accountsChanged', async function (accounts) {
+        if(!_accountsChanged) window.ethereum.on('accountsChanged', async function (accounts) {
             ACCOUNT = accounts[0];
             await updateProvider();
             onConnect();
-        });
+        }) && (_accountsChanged = true);
+        if(!_chainChanged) window.ethereum.on('chainChanged', async function (ID) {
+            await updateProvider();
+            onConnect();
+        }) && (_chainChanged = true);
 
         await updateProvider();
 
