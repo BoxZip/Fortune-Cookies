@@ -207,6 +207,10 @@ button{
     max-height: 10em;
     max-width: 10em;
 }
+#contract b{
+    background-color: white!important;
+    padding: 0.25em 0.5em;
+}
 #info{
     background-color: white;
     padding-bottom: 10vh;
